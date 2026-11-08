@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Re:AliTea个人故事选择</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23cde5fb'/%3E%3Cpath d='M12 4l1.6 4.4L18 10l-4.4 1.6L12 16l-1.6-4.4L6 10l4.4-1.6z' stroke='%232f5d94' stroke-width='1.2' fill='none'/%3E%3C/svg%3E">
+<style>
+/* 1rem = 屏宽的 1/43.2，即参考图 864×1920（@2x → 432pt）的等比单位 */
+html{font-size:calc(min(100vw, 43.2rem) / 43.2); font-size:calc(min(100vw, 432px) / 43.2)}
+@supports (width: 1rem){ html{font-size:calc(100vw / 43.2)} }
+@media (min-width:480px){ html{font-size:11.11px} }
+
+@font-face{
+  font-family:'Bacchus';
+  src:url('Bacchus-Light-2.ttf') format('truetype');
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'SourceHanSC';
+  src:url('assets/SourceHanSansSC-Medium.woff2') format('woff2');
+  font-weight:500; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'YuGothicWeb';
+  src:url('assets/YuGothic-Bold.woff2') format('woff2');
+  font-weight:700; font-style:normal; font-display:swap;
+}
+
+:root{
+  --font-cn:'SourceHanSC','PingFang SC','Microsoft YaHei',sans-serif;
+  --font-jp:'YuGothicWeb','Hiragino Kaku Gothic ProN','Yu Gothic','Meiryo',sans-serif;
+  --font-lat:'Bacchus','Optima','Georgia',serif;
+  --ink:#15294a;
+  --ink-2:#3f5c83;
+  --ink-3:#8aa6c8;
+  --num:#a8823f;
+  --card:rgba(255,255,255,.92);
+}
+body[data-lang="jp"]{--font-cn:var(--font-jp)}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font-cn);
+  color:var(--ink);
+  min-height:100vh;
+  background:#dceeff;
+  background-image:
+    radial-gradient(60% 22% at 82% 4%, rgba(255,255,255,.9) 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(70% 26% at 10% 12%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(80% 30% at 40% 98%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 66%),
+    linear-gradient(180deg,#6fb0e6 0%,#8ac1ef 8%,#a9d2f6 20%,#c9e4fb 36%,#e2f1ff 52%,#f1faff 74%,#e8f4ff 100%);
+  background-attachment:fixed;
+  background-size:cover;
+  font-size:1.5rem;
+  line-height:1.5;
+  overflow-x:hidden;
+}
+
+.stars{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden}
+.stars i{
+  position:absolute; display:block; width:1.4rem; height:1.4rem; opacity:.6;
+  background:
+    linear-gradient(0deg,transparent 46%,#fff 47%,#fff 53%,transparent 54%),
+    linear-gradient(90deg,transparent 46%,#fff 47%,#fff 53%,transparent 54%);
+  filter:drop-shadow(0 0 .4rem rgba(255,255,255,.9));
+}
+.stars i.big{width:2.2rem; height:2.2rem; opacity:.8}
+
+.page{
+  position:relative; z-index:1;
+  width:100%;
+  max-width:43.2rem;
+  margin:0 auto;
+  padding:0 0 calc(12rem + env(safe-area-inset-bottom));
+  min-height:100vh;
+}
+
+/* ---------- 顶部标题 ---------- */
+.hd{
+  position:relative;
+  padding:calc(6.2rem + env(safe-area-inset-top)) 2rem 0;
+  display:flex; align-items:flex-start; gap:1rem;
+}
+.lab{flex:1 1 auto; min-width:0; position:relative}
+.lab span{
+  display:block;
+  font-size:1.3rem;
+  letter-spacing:.16em;
+  color:#fff;
+  text-shadow:0 .1rem .5rem rgba(30,80,140,.35);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.lab i{
+  display:block; height:1px; margin-top:.9rem; width:76%;
+  background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(255,255,255,0));
+}
+.lab::before{
+  content:''; position:absolute; left:-1.1rem; top:-.4rem;
+  width:1px; height:5.4rem;
+  background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,0));
+}
+.back{
+  flex:0 0 auto;
+  width:3.8rem; height:3.8rem; margin-top:-.6rem;
+  display:none; align-items:center; justify-content:center;
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:50%;
+  background:rgba(255,255,255,.45);
+  color:#1d4a76; font-size:1.7rem; line-height:1;
+  padding:0; cursor:pointer;
+  backdrop-filter:blur(.4rem); -webkit-backdrop-filter:blur(.4rem);
+}
+.langs{flex:0 0 auto; display:flex; gap:.5rem; margin-top:-.4rem}
+.langs button{
+  min-width:4.2rem; height:3.2rem;
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:999px;
+  background:rgba(255,255,255,.42);
+  color:#173f68;
+  font-family:var(--font-lat);
+  font-size:1.1rem; letter-spacing:.18em;
+  cursor:pointer;
+  backdrop-filter:blur(.4rem); -webkit-backdrop-filter:blur(.4rem);
+}
+.langs button[aria-pressed="true"]{
+  background:rgba(255,255,255,.96);
+  border-color:#fff;
+  box-shadow:0 .3rem 1rem rgba(30,80,140,.2);
+}
+
+/* ---------- 角色列表（阶梯斜排） ---------- */
+.roles{
+  display:flex; flex-direction:column;
+  gap:3.1rem;
+  margin-top:9.6rem;
+  padding:0;
+}
+.role{
+  display:flex; align-items:center; gap:1.2rem;
+  height:5.35rem;
+  padding:0 2rem 0 1.6rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.85);
+  background:var(--card);
+  box-shadow:0 .7rem 1.9rem rgba(40,95,160,.2), inset 0 1px 0 rgba(255,255,255,.95);
+  text-decoration:none; color:inherit;
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.role:active{transform:scale(.985); box-shadow:0 .4rem 1.2rem rgba(40,95,160,.18)}
+.role .emb{flex:0 0 auto; display:flex}
+.role .names{flex:1 1 auto; min-width:0}
+.role .lat{
+  display:block;
+  font-family:var(--font-lat);
+  font-size:2.45rem;
+  letter-spacing:.04em;
+  line-height:1.02;
+  color:#12233f;
+}
+.role .jp{
+  display:block; margin-top:.15rem;
+  font-size:1.05rem; letter-spacing:.16em;
+  color:#2a4166;
+}
+.role .arw{flex:0 0 auto; display:flex; color:#b8cbe1}
+
+/* ---------- 角色页 ---------- */
+.hero{padding:0 2rem; margin-top:4.6rem}
+.hero .big{
+  font-family:var(--font-lat);
+  font-size:4.5rem;
+  line-height:1.04;
+  letter-spacing:.02em;
+  color:#fff;
+  text-shadow:0 .2rem 1.2rem rgba(30,80,140,.3);
+  word-break:break-word;
+}
+.hero .cjn{
+  margin-top:.9rem;
+  font-size:1.75rem; letter-spacing:.1em;
+  color:#fff;
+  text-shadow:0 .1rem .7rem rgba(30,80,140,.35);
+}
+.hero .en{
+  margin-top:.6rem;
+  font-family:var(--font-lat);
+  font-size:1.15rem; letter-spacing:.3em;
+  color:rgba(255,255,255,.95);
+}
+.hero .note{
+  margin-top:1.3rem;
+  max-width:16em;
+  font-family:var(--font-lat);
+  font-size:1.1rem; line-height:1.72;
+  color:rgba(255,255,255,.9);
+}
+
+/* ---------- 剧集胶囊行 ---------- */
+.list{
+  padding:0 2.5rem;
+  margin-top:3.4rem;
+  display:flex; flex-direction:column; gap:1.5rem;
+}
+.ep{
+  display:flex; align-items:center; gap:1.2rem;
+  min-height:6.75rem;
+  padding:.8rem 2.2rem .8rem 1.6rem;
+  border-radius:999px;
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 .7rem 1.9rem rgba(40,95,160,.17), inset 0 1px 0 rgba(255,255,255,.95);
+  text-decoration:none; color:inherit;
+  transition:transform .16s ease;
+}
+.ep:active{transform:scale(.985)}
+.ep .txt{flex:1 1 auto; min-width:0}
+.ep .no{
+  display:block; font-size:1.15rem; letter-spacing:.1em;
+  color:var(--num);
+}
+.ep .ti{
+  display:block; margin-top:.3rem;
+  font-size:1.62rem; letter-spacing:.01em;
+  color:#132642;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* ---------- 卡面行 ---------- */
+.crow{
+  border-radius:999px;
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 .7rem 1.9rem rgba(40,95,160,.17), inset 0 1px 0 rgba(255,255,255,.95);
+  overflow:hidden;
+}
+.chead{
+  display:flex; align-items:center; gap:1.2rem;
+  min-height:6.75rem;
+  padding:.8rem 1.1rem .8rem 1.6rem;
+}
+.chead .txt{flex:1 1 auto; min-width:0}
+.chead .nm{
+  display:block; font-size:1.55rem; color:#132642;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.chead .ct{
+  display:block; margin-top:.25rem;
+  font-size:1.05rem; letter-spacing:.1em; color:var(--ink-3);
+}
+.fold{
+  flex:0 0 auto;
+  width:4.4rem; height:4.4rem;
+  display:flex; align-items:center; justify-content:center;
+  border:0; border-radius:1.3rem;
+  background:linear-gradient(155deg,#8adcf8,#35bdf0 58%,#1c9ad4);
+  color:#fff; cursor:pointer;
+  box-shadow:0 .4rem 1.1rem rgba(24,146,204,.38);
+  transition:transform .16s ease;
+}
+.fold:active{transform:scale(.93)}
+.fold svg{width:1.6rem; height:1.6rem; transition:transform .25s ease}
+.fold[aria-expanded="true"] svg{transform:rotate(180deg)}
+.cbody{display:none; padding:.2rem 1.4rem 1.4rem}
+.cbody.open{display:block; animation:cin .26s ease both}
+.cbody .ep{min-height:5.6rem; margin-top:1rem; box-shadow:0 .4rem 1.2rem rgba(40,95,160,.12)}
+@keyframes cin{from{opacity:0; transform:translateY(-.5rem)}to{opacity:1; transform:none}}
+
+/* ---------- 空态 ---------- */
+.empty{
+  margin:3.4rem 2.5rem 0;
+  padding:3.6rem 2rem;
+  border-radius:2.6rem;
+  border:1px dashed rgba(110,155,205,.45);
+  background:rgba(255,255,255,.62);
+  text-align:center;
+}
+.empty .e{
+  font-family:var(--font-lat); font-size:1.2rem; letter-spacing:.28em; color:#a2bad3;
+}
+.empty .t{
+  display:block; margin-top:.9rem;
+  font-size:1.32rem; letter-spacing:.04em; color:var(--ink-2);
+}
+
+/* ---------- 底部两段切换 ---------- */
+.tabs{
+  position:fixed; left:0; right:0; bottom:0; z-index:30;
+  display:none;
+  padding:0 2rem calc(4.4rem + env(safe-area-inset-bottom));
+  pointer-events:none;
+}
+.tabs.on{display:block}
+.tabbar{
+  max-width:39rem; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1fr;
+  border-radius:999px; overflow:hidden;
+  box-shadow:0 1rem 2.6rem rgba(30,80,140,.22);
+  pointer-events:auto;
+  background:rgba(255,255,255,.9);
+  backdrop-filter:blur(.6rem); -webkit-backdrop-filter:blur(.6rem);
+}
+.tabbar button{
+  height:4.5rem;
+  border:0; background:transparent;
+  color:#2a4265;
+  font-family:var(--font-cn);
+  font-size:1.3rem; letter-spacing:.1em;
+  cursor:pointer;
+}
+.tabbar button[aria-selected="true"]{
+  background:linear-gradient(100deg,#4acbf3,#25b2e8);
+  color:#fff;
+}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed; left:50%; bottom:calc(11rem + env(safe-area-inset-bottom));
+  transform:translate(-50%,1rem);
+  padding:1rem 1.8rem; border-radius:999px;
+  background:rgba(20,38,68,.9);
+  color:#fff; font-size:1.25rem; letter-spacing:.03em;
+  opacity:0; pointer-events:none; z-index:60;
+  transition:opacity .2s ease, transform .2s ease;
+  max-width:78vw; text-align:center;
+}
+.toast.on{opacity:1; transform:translate(-50%,0)}
+
+@media (min-width:480px){
+  .page{max-width:440px}
+}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true">
+  <i class="big" style="left:27%;top:4%"></i>
+  <i style="left:71%;top:8%"></i>
+  <i style="left:11%;top:15%"></i>
+  <i class="big" style="left:89%;top:21%"></i>
+  <i style="left:57%;top:1.6%;width:.9rem;height:.9rem"></i>
+</div>
+
+<div class="page">
+  <header class="hd">
+    <button class="back" id="back" aria-label="返回"><span>‹</span></button>
+    <div class="lab"><span id="lab">角色故事</span><i></i></div>
+    <div class="langs">
+      <button id="chipCn" aria-pressed="true">CN</button>
+      <button id="chipJp" aria-pressed="false">JP</button>
+    </div>
+  </header>
+  <main id="main"></main>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tabbar" role="tablist">
+    <button role="tab" data-tab="personal" aria-selected="true" id="tabP">个人剧情</button>
+    <button role="tab" data-tab="cardstory" aria-selected="false" id="tabC">卡面剧情</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   数据
+   ========================================================= */
+var ROLES = [
+  { id:'minoru', lat:'MINORU', cn:'濑户口实', short:'实', jp:'ミノル', color:'#61c4cf',
+    off:11.0, rin:1.2, eps:[], cards:[] },
+  { id:'en',     lat:'EN',     cn:'七日远',   short:'远', jp:'エン',   color:'#ffb5c5',
+    off:8.6,  rin:1.6, eps:[], cards:[] },
+  { id:'nagare', lat:'NAGARE', cn:'千叶漾',   short:'漾', jp:'ナガレ', color:'#bf8fff',
+    off:6.2,  rin:2.2, eps:[], cards:[] },
+  { id:'ao',     lat:'AO',     cn:'永野苍',   short:'苍', jp:'アオ',   color:'#c7ced4',
+    off:3.8,  rin:3.0, eps:[
+      { no:{cn:'第 1 话', jp:'第 1 話'},
+        title:{cn:'作为命运共同体', jp:'運命共同体として'},
+        href:'角色对话小说阅读器.html' }
+    ], cards:[] }
+];
+
+var T = {
+  series:{ cn:'角色故事', jp:'キャラクターストーリー' },
+  personal:{ cn:'个人剧情', jp:'パーソナルストーリー' },
+  cardstory:{ cn:'卡面剧情', jp:'メモリーストーリー' },
+  noEp:{ cn:'这个角色还没有公开的故事。', jp:'このキャラクターの物語はまだ公開されていません。' },
+  noCard:{ cn:'这个角色还没有公开的卡面剧情。', jp:'このキャラクターのメモリーストーリーはまだ公開されていません。' },
+  back:{ cn:'返回', jp:'もどる' }
+};
+var EN_PERSONAL = 'PERSONAL STORY';
+var EN_CARD = 'MEMORY STORY';
+
+/* =========================================================
+   状态
+   ========================================================= */
+var S = { lang:'cn', view:'list', role:null, tab:'personal' };
+var KEY = 'story-index-v1';
+try{
+  var sv = JSON.parse(localStorage.getItem(KEY) || '{}');
+  if(sv && sv.lang){ S.lang = sv.lang === 'jp' ? 'jp' : 'cn'; }
+}catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify({lang:S.lang})); }catch(e){} }
+
+function tx(o){ return o[S.lang] || o.cn; }
+function getRole(id){
+  for(var i=0;i<ROLES.length;i++){ if(ROLES[i].id === id) return ROLES[i]; }
+  return null;
+}
+
+/* 徽记：圆环 + 四芒星 */
+function emblem(color, size){
+  var s = (size || 4.4) + 'rem';
+  return '<span class="emb">' +
+    '<svg width="' + (size||4.4) + 'rem" height="' + (size||4.4) + 'rem" viewBox="0 0 32 32" ' +
+      'style="width:' + s + ';height:' + s + '" fill="none">' +
+      '<circle cx="16" cy="16" r="14" stroke="' + color + '" stroke-width="1.2" opacity=".75"/>' +
+      '<path d="M16 5.4l2.3 6.7 6.7 2.3-6.7 2.3L16 23.4l-2.3-6.7-6.7-2.3 6.7-2.3z" ' +
+        'stroke="' + color + '" stroke-width="1.3"/>' +
+      '<circle cx="24.6" cy="22.8" r="1.7" fill="' + color + '" opacity=".8"/>' +
+    '</svg></span>';
+}
+
+/* =========================================================
+   渲染
+   ========================================================= */
+var main = document.getElementById('main');
+var labEl = document.getElementById('lab');
+var backBtn = document.getElementById('back');
+var tabsEl = document.getElementById('tabs');
+var tabP = document.getElementById('tabP');
+var tabC = document.getElementById('tabC');
+
+function render(){
+  document.body.setAttribute('data-lang', S.lang);
+  document.documentElement.setAttribute('lang', S.lang === 'jp' ? 'ja' : 'zh-CN');
+  document.getElementById('chipCn').setAttribute('aria-pressed', S.lang === 'cn');
+  document.getElementById('chipJp').setAttribute('aria-pressed', S.lang === 'jp');
+
+  if(S.view === 'role'){
+    var r = getRole(S.role);
+    backBtn.style.display = 'flex';
+    backBtn.setAttribute('aria-label', tx(T.back));
+    labEl.textContent = r.lat + '　' + tx(T.series);
+    renderRolePage(r);
+  }else{
+    backBtn.style.display = 'none';
+    labEl.textContent = tx(T.series);
+    tabsEl.classList.remove('on');
+    renderList();
+  }
+}
+
+function renderList(){
+  var h = '<div class="roles">';
+  ROLES.forEach(function(r){
+    h += '<a class="role" href="#/role/' + r.id + '" ' +
+           'style="margin-left:' + r.off + 'rem;width:calc(43.2rem - ' + r.off + 'rem - ' + r.rin + 'rem)">' +
+           emblem(r.color, 4.6) +
+           '<span class="names">' +
+             '<span class="lat">' + r.lat + '</span>' +
+             '<span class="jp">' + (S.lang === 'jp' ? r.jp : r.short) + '</span>' +
+           '</span>' +
+           '<span class="arw"><svg width="1.5rem" height="1.5rem" style="width:1.5rem;height:1.5rem" ' +
+             'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' +
+             '<path d="M9 5l7 7-7 7"/></svg></span>' +
+         '</a>';
+  });
+  h += '</div>';
+  main.innerHTML = h;
+}
+
+function renderRolePage(r){
+  tabsEl.classList.add('on');
+  tabP.textContent = tx(T.personal);
+  tabC.textContent = tx(T.cardstory);
+  tabP.setAttribute('aria-selected', S.tab === 'personal');
+  tabC.setAttribute('aria-selected', S.tab === 'cardstory');
+
+  var h = '<section class="hero">' +
+      '<div class="big">' + r.lat + '</div>' +
+      '<div class="cjn">' + (S.lang === 'jp' ? r.jp : r.cn) + '</div>' +
+      '<div class="en">' + (S.tab === 'personal' ? EN_PERSONAL : EN_CARD) + '</div>' +
+    '</section>';
+
+  if(S.tab === 'personal'){
+    if(r.eps.length){
+      h += '<div class="list">';
+      r.eps.forEach(function(e){
+        h += '<a class="ep" href="' + e.href + '">' +
+               emblem(r.color, 4.2) +
+               '<span class="txt">' +
+                 '<span class="no">' + tx(e.no) + '</span>' +
+                 '<span class="ti">' + tx(e.title) + '</span>' +
+               '</span>' +
+             '</a>';
+      });
+      h += '</div>';
+    }else{
+      h += emptyBox(tx(T.noEp));
+    }
+  }else{
+    if(r.cards.length){
+      h += '<div class="list">';
+      r.cards.forEach(function(c, i){
+        var id = 'cb' + i;
+        h += '<div class="crow">' +
+               '<div class="chead">' +
+                 emblem(r.color, 4.2) +
+                 '<span class="txt">' +
+                   '<span class="nm">' + tx(c.name) + '</span>' +
+                   '<span class="ct">' + (c.eps || []).length + ' ' +
+                     (S.lang === 'jp' ? '話' : '话') + '</span>' +
+                 '</span>' +
+                 '<button class="fold" type="button" data-fold="' + id + '" aria-expanded="false">' +
+                   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                     '<path d="M6 9l6 6 6-6"/></svg>' +
+                 '</button>' +
+               '</div>' +
+               '<div class="cbody" id="' + id + '">' +
+                 (c.eps || []).map(function(e){
+                   return '<a class="ep" href="' + (e.href || '#') + '">' +
+                            '<span class="txt">' +
+                              '<span class="no">' + tx(e.no) + '</span>' +
+                              '<span class="ti">' + tx(e.title) + '</span>' +
+                            '</span></a>';
+                 }).join('') +
+               '</div>' +
+             '</div>';
+      });
+      h += '</div>';
+    }else{
+      h += emptyBox(tx(T.noCard));
+    }
+  }
+
+  main.innerHTML = h;
+
+  Array.prototype.forEach.call(main.querySelectorAll('[data-fold]'), function(btn){
+    btn.addEventListener('click', function(){
+      var body = document.getElementById(btn.getAttribute('data-fold'));
+      var open = body.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+}
+
+function emptyBox(msg){
+  return '<div class="empty"><span class="e">NO STORY YET</span>' +
+         '<span class="t">' + msg + '</span></div>';
+}
+
+/* =========================================================
+   路由
+   ========================================================= */
+function parseHash(){
+  var h = (location.hash || '').replace(/^#\/?/, '');
+  var p = h.split('/');
+  if(p[0] === 'role' && p[1] && getRole(p[1])){ S.view = 'role'; S.role = p[1]; }
+  else{ S.view = 'list'; S.role = null; }
+}
+
+window.addEventListener('hashchange', function(){
+  parseHash(); render(); window.scrollTo(0,0);
+});
+
+backBtn.addEventListener('click', function(){ location.hash = ''; });
+
+tabP.addEventListener('click', function(){
+  S.tab = 'personal'; renderRolePage(getRole(S.role)); window.scrollTo(0,0);
+});
+tabC.addEventListener('click', function(){
+  S.tab = 'cardstory'; renderRolePage(getRole(S.role)); window.scrollTo(0,0);
+});
+
+document.getElementById('chipCn').addEventListener('click', function(){ S.lang='cn'; save(); render(); });
+document.getElementById('chipJp').addEventListener('click', function(){ S.lang='jp'; save(); render(); });
+
+parseHash();
+render();
+</script>
+</body>
+</html>
