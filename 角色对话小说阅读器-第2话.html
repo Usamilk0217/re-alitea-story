@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ao·第2话 记忆深处残留的事物</title>
+<meta name="theme-color" content="#15161d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2315161d'/%3E%3Cpath d='M5 9h17l-4 14H2z' fill='%2389bc3e'/%3E%3Cpath d='M14 9h17l-4 14h-16z' fill='%234f3f78'/%3E%3C/svg%3E">
+<style>
+  @font-face{
+    font-family:"SourceHanSC";
+    src:url("assets/SourceHanSansSC-Medium.woff2") format("woff2");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:"YuGothicWeb";
+    src:url("assets/YuGothic-Bold.woff2") format("woff2");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:"Bacchus";
+    src:url("Bacchus-Light-2.ttf") format("truetype");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+
+  :root{
+    --bg:#15161d;
+    --panel:#1d1f28;
+    --ink:#ffffff;
+    --ink-dim:#9aa1b0;
+    --hair:rgba(255,255,255,.13);
+    --gold:#c9a96b;
+    --gold-soft:#d9bd8a;
+    --navy:#232a42;
+    --base-fs:15px;
+    --notch:9px;
+    --font-cn:"SourceHanSC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+    --font-jp:"YuGothicWeb","Yu Gothic","Hiragino Sans","Meiryo","PingFang SC",sans-serif;
+    --font-latin:"Bacchus","Yu Gothic","PingFang SC",sans-serif;
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-cn);
+    -webkit-font-smoothing:antialiased;
+  }
+  body[data-lang="jp"]{font-family:var(--font-jp)}
+
+  .app{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    height:100dvh;
+    max-width:480px;
+    margin:0 auto;
+    padding:0 22px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,.045);
+    user-select:none;
+    touch-action:manipulation;
+  }
+
+  /* ===== 顶栏 ===== */
+  .hud{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:calc(env(safe-area-inset-top) + 14px) 0 10px;
+    position:relative;
+    z-index:2;
+    font-family:var(--font-cn);
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    height:40px;
+    padding:0 14px;
+    border:1px solid var(--hair);
+    border-radius:999px;
+    background:var(--panel);
+    color:var(--ink);
+    font-family:inherit;
+    font-size:14px;
+    cursor:pointer;
+    transition:background .18s ease;
+  }
+  .pill:active{background:#262935}
+  .pill svg{width:16px;height:16px;flex:0 0 auto;opacity:.75}
+  .pill .who{max-width:88px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .seg{
+    display:inline-flex;
+    align-items:center;
+    gap:2px;
+    padding:3px;
+    border:1px solid var(--hair);
+    border-radius:999px;
+    background:var(--panel);
+  }
+  .seg button{
+    min-width:62px;
+    height:34px;
+    padding:0 10px;
+    border:0;
+    border-radius:999px;
+    background:transparent;
+    color:var(--ink-dim);
+    font-family:inherit;
+    font-size:13px;
+    letter-spacing:.06em;
+    cursor:pointer;
+    transition:color .18s ease, background .18s ease;
+  }
+  .seg button[aria-pressed="true"]{background:#2f3342;color:#fff}
+
+  /* ===== 正文 ===== */
+  .transcript{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:6px 0 104px;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    overscroll-behavior:contain;
+  }
+  .transcript::-webkit-scrollbar{display:none}
+
+  .line{margin-bottom:30px;--fs:var(--base-fs)}
+
+  /* 缎带名牌：矩形 + 右端内凹的旗尾 */
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    height:26px;
+    padding:0 24px 0 12px;
+    background:var(--c);
+    color:var(--c-ink,#fff);
+    font-size:var(--base-fs);
+    line-height:1;
+    letter-spacing:.09em;
+    clip-path:polygon(0 0, 100% 0, calc(100% - var(--notch)) 50%, 100% 100%, 0 100%);
+    text-shadow:var(--c-ts,0 1px 0 rgba(0,0,0,.3));
+  }
+
+  /* 默认字号与名字一致，只有情绪上来的句子才变大 */
+  .say{
+    margin-top:15px;
+    font-size:var(--fs);
+    line-height:1.8;
+    letter-spacing:.02em;
+    white-space:pre-wrap;
+    word-break:break-word;
+    text-shadow:0 1px 3px rgba(0,0,0,.45);
+  }
+  .line.lv1{--fs:19px}
+  .line.lv2{--fs:23px}
+  .line.lv2 .say{line-height:1.68}
+
+  @keyframes cardIn{
+    from{opacity:0;transform:translateY(14px) scale(.986)}
+    to{opacity:1;transform:none}
+  }
+  @keyframes bodyIn{from{opacity:0}to{opacity:1}}
+
+  /* ===== 剧情插图：横幅切入，右进渐显 → 停留 0.6s → 左出渐隐 ===== */
+  .cgcard{
+    position:relative;
+    margin:2px 0 28px -22px;
+    width:calc(100% + 44px);
+    height:clamp(150px, 30vh, 230px);
+    overflow:hidden;
+    background:transparent;
+    mask-image:linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    -webkit-mask-image:linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  }
+  .cgcard img{display:block;width:100%;height:100%;object-fit:cover}
+  .cgcard.run{animation:cgRun 1.75s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes cgRun{
+    0%{opacity:0;transform:translateX(22%)}
+    32%{opacity:1;transform:translateX(0)}
+    68%{opacity:1;transform:translateX(0)}
+    100%{opacity:0;transform:translateX(-22%)}
+  }
+
+  /* ===== 题记 ===== */
+  .quotecard{
+    margin:6px 0 26px;
+    padding:24px 14px;
+    text-align:center;
+    animation:cardIn 2.7s cubic-bezier(.16,.62,.2,1) both;
+  }
+  .quotecard.no-anim,
+  .quotecard.finish,
+  .quotecard.finish .qc-body{animation:none}
+  .qc-body{animation:bodyIn 1.9s ease 1s both}
+  .qc-rule{
+    height:1px;
+    background:linear-gradient(90deg, rgba(201,169,107,0), rgba(201,169,107,.55), rgba(201,169,107,0));
+  }
+  .qc-text{
+    margin:18px 0;
+    color:#d8bf8f;
+    font-size:clamp(16px,4.3vw,20px);
+    line-height:1.9;
+    letter-spacing:.05em;
+    white-space:pre-wrap;
+  }
+
+  /* ===== 地点切换框：白色横条 + 金色细线 + 星芒 ===== */
+  .placecard{
+    position:relative;
+    margin:2px 0 26px;
+    padding:19px 26px 13px;
+    border-radius:20px;
+    background:#fcfdff;
+    box-shadow:0 18px 40px rgba(0,0,0,.42), 0 0 0 1px rgba(255,255,255,.55) inset;
+    text-align:center;
+    animation:cardIn 2.7s cubic-bezier(.16,.62,.2,1) both;
+    isolation:isolate;
+  }
+  .placecard.no-anim,
+  .placecard.finish,
+  .placecard.finish .pc-body{animation:none}
+  .pc-body{
+    position:relative;
+    z-index:2;
+    animation:bodyIn 1.9s ease 1s both;
+  }
+  .pc-name{
+    margin:0;
+    color:var(--navy);
+    font-size:clamp(17px,4.7vw,23px);
+    font-weight:700;
+    line-height:1.5;
+    letter-spacing:.045em;
+    white-space:pre-wrap;
+  }
+  .pc-name.small{font-size:clamp(13px,3.8vw,17px);line-height:1.7}
+  .pc-rule{
+    display:flex;
+    align-items:center;
+    width:74%;
+    margin:11px auto 0;
+    gap:9px;
+  }
+  .pc-rule span{
+    flex:1 1 auto;
+    height:1px;
+    background:linear-gradient(90deg, rgba(201,169,107,0) 0%, rgba(201,169,107,.85) 30%, rgba(201,169,107,.85) 70%, rgba(201,169,107,0) 100%);
+  }
+  .pc-rule i{
+    width:5px;
+    height:5px;
+    background:var(--gold);
+    transform:rotate(45deg);
+    flex:0 0 auto;
+  }
+  .pc-spark{position:absolute;z-index:1;pointer-events:none}
+
+  /* ===== 标题框：蓝白 ===== */
+  .titlecard{
+    position:relative;
+    margin:2px 0 34px;
+    height:clamp(232px, 33vh, 286px);
+    border-radius:8px;
+    overflow:hidden;
+    background:#f7f8fb;
+    box-shadow:0 10px 30px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.1);
+    animation:cardIn 2.7s cubic-bezier(.16,.62,.2,1) both;
+    isolation:isolate;
+  }
+  .titlecard.no-anim,
+  .titlecard.finish,
+  .titlecard.finish .tc-body{animation:none}
+  .tc-wave{
+    position:absolute;
+    left:0;
+    width:100%;
+    height:34px;
+    z-index:0;
+  }
+  .tc-wave.top{top:0}
+  .tc-wave.bottom{bottom:0}
+  .tc-glow{
+    position:absolute;
+    inset:0;
+    background:radial-gradient(120% 70% at 50% 45%, #ffffff 35%, rgba(247,248,251,0) 70%);
+    z-index:0;
+  }
+  .tc-star{position:absolute;z-index:1;pointer-events:none}
+  .tc-body{
+    position:relative;
+    z-index:2;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px 24px 36px;
+    text-align:center;
+    animation:bodyIn 1.9s ease 1s both;
+  }
+  .tc-type{
+    margin:0;
+    color:#bfa06a;
+    font-size:12px;
+    letter-spacing:.2em;
+  }
+  .tc-cast{
+    margin:1px 0 0;
+    color:#c9ad7d;
+    font-size:11px;
+    letter-spacing:.14em;
+  }
+  .tc-rule{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:78%;
+    margin:2px 0 11px;
+  }
+  .tc-rule span{
+    flex:1 1 auto;
+    height:1px;
+    background:linear-gradient(90deg, rgba(206,177,131,0) 0%, #ceb183 22%, #ceb183 78%, rgba(206,177,131,0) 100%);
+  }
+  .tc-rule i{
+    width:5px;
+    height:5px;
+    background:#c9a76b;
+    transform:rotate(45deg);
+    flex:0 0 auto;
+  }
+  .tc-ep{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:0;
+    color:#bfa06a;
+    font-size:17px;
+    letter-spacing:.1em;
+  }
+  .tc-ep .fl{width:34px;height:13px;flex:0 0 auto}
+  .tc-ep .fl.left{transform:scaleX(-1)}
+  .tc-title{
+    margin:6px 0 0;
+    color:#1d2a45;
+    font-size:20px;
+    line-height:1.3;
+    letter-spacing:.06em;
+    font-weight:700;
+  }
+
+  .tc-type,
+  .tc-cast,
+  .tc-rule{position:relative;top:-4px}
+  .tc-ep,
+  .tc-title{position:relative;top:-2px}
+
+  /* ===== 点选框：白色胶囊 + 金色星芒 ===== */
+  .choicebox{
+    margin:2px 0 32px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    animation:boxIn .35s ease both;
+  }
+  .choicebox.gone{animation:boxOut .28s ease both}
+  @keyframes boxIn{from{opacity:0}to{opacity:1}}
+  @keyframes boxOut{from{opacity:1}to{opacity:0;transform:translateY(-4px)}}
+
+  .opt{
+    position:relative;
+    display:block;
+    width:100%;
+    min-height:47px;
+    padding:9px 56px 9px 22px;
+    border:1px solid rgba(214,222,236,.95);
+    border-radius:999px;
+    background:linear-gradient(180deg,#ffffff 0%,#f2f8fe 52%,#dfeafa 100%);
+    color:#242a3d;
+    font-family:inherit;
+    font-size:var(--base-fs);
+    line-height:1.55;
+    letter-spacing:.02em;
+    text-align:left;
+    box-shadow:0 10px 22px rgba(0,0,0,.34), 0 1px 0 rgba(255,255,255,.9) inset;
+    cursor:pointer;
+    animation:optIn .5s cubic-bezier(.2,.8,.3,1) backwards;
+    transition:transform .12s ease;
+  }
+  .opt:active{transform:scale(.985)}
+  @keyframes optIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .opt .spark{
+    position:absolute;
+    right:16px;
+    top:50%;
+    transform:translateY(-50%);
+    width:34px;
+    height:34px;
+    opacity:.85;
+    pointer-events:none;
+  }
+
+  /* ===== 结尾 ===== */
+  .end{
+    margin:10px 0 6px;
+    display:flex;
+    justify-content:flex-end;
+    animation:rise .6s ease both;
+  }
+  .end .tc{
+    margin:0;
+    color:var(--gold-soft);
+    font-family:var(--font-latin);
+    font-size:15px;
+    letter-spacing:.14em;
+    text-shadow:0 1px 6px rgba(201,169,107,.35);
+  }
+  .end .mark{margin:0;color:#767d8c;font-size:14px;letter-spacing:.28em}
+
+  /* 结尾再点一下出现的「继续阅读」 */
+  .nextlink{
+    margin:4px 0 40px;
+    display:flex;
+    justify-content:flex-end;
+    animation:rise .7s ease both;
+  }
+  .nextlink a{
+    display:inline-block;
+    padding:9px 16px 8px;
+    color:var(--gold-soft);
+    font-size:14px;
+    line-height:1.5;
+    letter-spacing:.08em;
+    text-decoration:none;
+    border:1px solid rgba(201,169,107,.42);
+    background:linear-gradient(180deg, rgba(211,182,129,.14), rgba(211,182,129,.05));
+    -webkit-tap-highlight-color:transparent;
+  }
+  .nextlink a:active{background:rgba(211,182,129,.22)}
+  .btn{
+    height:48px;
+    padding:0 22px;
+    border:1px solid var(--hair);
+    border-radius:999px;
+    background:var(--panel);
+    color:#e9ebf1;
+    font-family:inherit;
+    font-size:15px;
+    letter-spacing:.04em;
+    cursor:pointer;
+  }
+  .btn:active{background:#262935}
+  .btn.solid{border-color:transparent;background:#eef0f5;color:#15161d}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ===== 进度 & 关闭 ===== */
+  .track{
+    position:absolute;
+    right:9px;
+    top:50%;
+    transform:translateY(-50%);
+    width:2px;
+    height:34vh;
+    max-height:280px;
+    border-radius:2px;
+    background:rgba(255,255,255,.1);
+    pointer-events:none;
+  }
+  .thumb{
+    position:absolute;
+    left:-1px;
+    top:0;
+    width:4px;
+    height:24px;
+    border-radius:2px;
+    background:rgba(255,255,255,.8);
+    transition:transform .28s ease;
+  }
+  .closeBtn{
+    position:absolute;
+    right:12px;
+    bottom:calc(env(safe-area-inset-bottom) + 16px);
+    width:46px;
+    height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:50%;
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    cursor:pointer;
+    z-index:3;
+  }
+  .closeBtn:active{background:rgba(255,255,255,.12)}
+  .closeBtn svg{width:17px;height:17px}
+
+  /* ===== 弹层 ===== */
+  .mask{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(6,7,11,.62);
+    animation:fade .22s ease both;
+  }
+  .mask[hidden]{display:none}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+
+  .sheet{
+    width:100%;
+    max-width:480px;
+    max-height:92dvh;
+    overflow-y:auto;
+    padding:22px 22px calc(env(safe-area-inset-bottom) + 22px);
+    background:#1d1f28;
+    border:1px solid rgba(255,255,255,.07);
+    border-bottom:0;
+    border-radius:22px 22px 0 0;
+    animation:up .3s cubic-bezier(.2,.8,.3,1) both;
+    font-family:var(--font-cn);
+  }
+  .sheet[hidden]{display:none}
+  @keyframes up{from{transform:translateY(24px)}to{transform:none}}
+
+  .sheet h2{margin:0 0 4px;font-size:17px;font-weight:400;letter-spacing:.03em}
+  .sheet .sub{margin:0 0 20px;color:#8c93a3;font-size:13px;line-height:1.6}
+
+  .field{margin-bottom:16px}
+  .field .label{display:block;margin-bottom:8px;color:#b9bfcd;font-size:13px;letter-spacing:.04em}
+  .field input[type="text"]{
+    width:100%;
+    height:48px;
+    padding:0 14px;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:12px;
+    background:#15161d;
+    color:#fff;
+    font-family:var(--font-cn);
+    font-size:16px;
+    letter-spacing:.04em;
+    outline:none;
+    transition:border-color .18s ease;
+  }
+  .field input[type="text"]:focus{border-color:#6b5a9c}
+  .field.jp input[type="text"]{font-family:var(--font-jp)}
+
+  .checkrow{display:flex;align-items:center;gap:10px;min-height:44px;margin:-2px 0 8px}
+  .checkrow input{width:20px;height:20px;margin:0;accent-color:#6b5a9c}
+  .checkrow label{color:#c9cedb;font-size:14px}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    min-width:62px;
+    height:44px;
+    padding:0 16px;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:999px;
+    background:transparent;
+    color:#a9b0c0;
+    font-family:var(--font-jp);
+    font-size:16px;
+    letter-spacing:.04em;
+    cursor:pointer;
+    transition:all .16s ease;
+  }
+  .chip[aria-pressed="true"]{border-color:#8a76bd;background:rgba(79,63,120,.34);color:#fff}
+
+  .note{margin:10px 0 0;color:#7b8291;font-size:12px;line-height:1.6}
+  .field input[type="range"]{
+    width:100%;
+    height:44px;
+    margin:0;
+    accent-color:#8a76bd;
+    background:transparent;
+  }
+
+  .actions{display:flex;gap:10px;margin-top:22px}
+  .actions .btn{flex:1}
+  .actions .btn.ghost{flex:0 0 auto;background:transparent;border-color:transparent;color:#9aa0ae}
+
+  @media (min-width:768px){
+    :root{--base-fs:16px}
+    .line.lv1{--fs:20px}
+    .line.lv2{--fs:25px}
+  }
+</style>
+</head>
+<body data-lang="cn">
+
+<div class="app" id="app">
+  <header class="hud">
+    <button class="pill" id="btnProfile" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="8" r="3.6"/><path d="M5 20c.6-3.9 3.4-5.8 7-5.8s6.4 1.9 7 5.8"/>
+      </svg>
+      <span class="who" id="whoLabel">京</span>
+    </button>
+    <div class="seg" id="segLang" role="group" aria-label="剧情语言">
+      <button type="button" data-lang="cn" aria-pressed="true">中文</button>
+      <button type="button" data-lang="jp" aria-pressed="false">日本語</button>
+    </div>
+  </header>
+
+  <main class="transcript" id="transcript" aria-live="polite"></main>
+
+  <div class="track" aria-hidden="true"><div class="thumb" id="thumb"></div></div>
+
+  <button class="closeBtn" id="btnExit" type="button" aria-label="返回上一页">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M6 6l12 12M18 6l-12 12"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ===== 弹层：名字与自称 ===== -->
+<div class="mask" id="mask" hidden>
+  <div class="sheet" id="sheetProfile">
+    <h2>你是谁</h2>
+
+    <div class="field">
+      <label class="label" for="nameCn">名字（中文）</label>
+      <input id="nameCn" type="text" value="京" maxlength="12" placeholder="京" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="checkrow">
+      <input id="useJp" type="checkbox" checked>
+      <label for="useJp">日文名单独设定（不勾选则沿用中文名）</label>
+    </div>
+
+    <div class="field jp" id="jpField">
+      <label class="label" for="nameJp">名字（日文）</label>
+      <input id="nameJp" type="text" value="キョウ" maxlength="12" placeholder="キョウ" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="field">
+      <span class="label">自称（仅日文台词）</span>
+      <div class="chips" id="selfChips">
+        <button type="button" class="chip" data-self="私" aria-pressed="true">私</button>
+        <button type="button" class="chip" data-self="俺" aria-pressed="false">俺</button>
+        <button type="button" class="chip" data-self="自分" aria-pressed="false">自分</button>
+        <button type="button" class="chip" data-self="僕" aria-pressed="false">僕</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="label">台词出现速度</span>
+      <input id="speedRange" type="range" min="0" max="4" step="1" value="2" aria-label="台词出现速度">
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn ghost" id="btnCancel">取消</button>
+      <button type="button" class="btn solid" id="btnSave">确认更改</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   剧本
+   t:'line'   一句台词（内部换行照原剧本保留）
+   t:'card'   卡片（kind: quote 题记 / title 标题 / place 地点）
+   t:'choice' 点选框（选项各有自己的支线）
+   ========================================================= */
+const QUOTE = {
+  cn:'Re:AliTea 的、优雅而温柔的治愈者。',
+  jp:'Re:AliTeaの、優雅で優しい癒し手。'
+};
+
+const STORY = [
+  {t:'card', kind:'title'},
+  {t:'card', kind:'place'},
+  {t:'line', s:'ao',
+   cn:'辛苦了，Conductor。',
+   jp:'お疲れさまでした、\nコンダクター。'},
+  {t:'line', s:'ao',
+   cn:'今天的练习，\n也承蒙您帮助。',
+   jp:'今日のレッスンも、\nたくさん助けていただきました。'},
+  {t:'line', s:'nagare',
+   cn:'来自外界的意见，\n果然还是很宝贵的呢。',
+   jp:'外から見てくれる\n人の意見って、\nやっぱり貴重だよね。'},
+  {t:'line', s:'minoru',
+   cn:'同感。',
+   jp:'同感です。'},
+  {t:'line', s:'minoru',
+   cn:'虽然您是苍的Conductor，\n却也为我们提供了很大的助力。',
+   jp:'アオのコンダクターでありながら、\n私たちにも\n多大な助力をいただきました。'},
+  {t:'line', s:'minoru',
+   cn:'托您的福，\n我们的实力提升了不少。',
+   jp:'君のおかげで、\n実力はかなり向上しています。'},
+  {t:'line', s:'minoru',
+   cn:'感谢您的尽力。',
+   jp:'ご尽力に感謝します。'},
+  {t:'line', s:'en',
+   cn:'哼，倒是不坏。',
+   jp:'ふん、悪くはなかった。'},
+  {t:'line', s:'en',
+   cn:'但是，\n为什么突然变成这种气氛了。',
+   jp:'だが、\nなぜいきなり\nこんな空気になっている。'},
+  {t:'line', s:'en',
+   cn:'目标还远着呢。\n现在发表感言也太早了。',
+   jp:'目標はまだ遠いだろう。\n感想を言い合うには早い。'},
+  {t:'line', s:'en',
+   cn:'把时间耗在这种事上，\n可是会来不及的。',
+   jp:'こんなことに\n時間を割いていたら、\n間に合わなくなるぞ。'},
+  {t:'line', s:'en',
+   cn:'顺便说一句，\n我最讨厌这种让人浑身发痒的场面。',
+   jp:'ついでに言っておくが、\n俺はこういうむず痒い場面が\n一番嫌いだ。'},
+  {t:'line', s:'ao',
+   cn:'偶尔把心情说出口，\n也是很重要的哦。',
+   jp:'たまには、\n気持ちを言葉にするのも\n大切ですよ。'},
+  {t:'line', s:'conductor',
+   cn:'我才该说，\n一直以来都是大家在帮助我。',
+   jp:'{self}のほうこそ、\nみなさんには\nいつも助けてもらってますよ。'},
+  {t:'line', s:'conductor',
+   cn:'不用那么客气也没关系的。',
+   jp:'そんなに改まらなくても\n大丈夫です。'},
+  {t:'line', s:'conductor',
+   cn:'今后也一起，\n朝着银河巡游加油吧！',
+   jp:'これからも一緒に、\nミルキーウェイ・パレードを目指して\n頑張りましょう！'},
+  {t:'line', s:'ao',
+   cn:'呵呵，正是这样。',
+   jp:'ふふ、そのとおりです。'},
+  {t:'line', s:'ao',
+   cn:'正要这样好好地传达，\n心意才会相通呢。',
+   jp:'こうしてきちんと伝えてこそ、\n心は通じ合うのですからね。'},
+  {t:'line', s:'minoru',
+   cn:'……苍。\n你，信任我吗？',
+   jp:'……アオ。\n君は、私を信頼していますか？'},
+  {t:'line', s:'ao',
+   cn:'怎么突然问这个？',
+   jp:'どうしたんですか、急に？'},
+  {t:'line', s:'ao',
+   cn:'当然，\n我一直都很信任实的哦。',
+   jp:'もちろん、\nミノルのことは\n信頼していますよ。'},
+  {t:'line', s:'ao',
+   cn:'实的话，\n不管多么不可能的事\n都能做到的吧？',
+   jp:'ミノルなら、\nどんな不可能なことでも\nやり遂げてしまうでしょう？'},
+  {t:'line', s:'minoru',
+   cn:'要真是那样就好了。',
+   jp:'本当にそうであれば、\nいいのですが。'},
+  {t:'line', s:'minoru',
+   cn:'既然说信任我，\n那就听我说一句。',
+   jp:'私を信頼していると言うのなら、\n一つ聞いてください。'},
+  {t:'line', s:'minoru',
+   cn:'Conductor是可以信任的人。',
+   jp:'コンダクターは、\n信用できる人物です。'},
+  {t:'line', s:'minoru',
+   cn:'毕竟从众多Spark Rider之中，\n选中了一无所知的你。',
+   jp:'大勢のスパークライダーの中から、\n何も知らない君を\n選んでくれたのですから。'},
+  {t:'line', s:'conductor',
+   cn:'诶？\n你们两个，是在说我吗？',
+   jp:'えっ、\n二人とも、{self}の話をしてるんですか？'},
+  {t:'line', s:'ao',
+   cn:'是我这边的事，\n请您不要在意呢。',
+   jp:'僕のことですから、\n気にしないでくださいね。'},
+  {t:'line', s:'conductor', lv:2,
+   cn:'（不，怎么可能不在意啊……！）',
+   jp:'（いや、気になるよ……！）'},
+  {t:'line', s:'ao',
+   cn:'那种事，\n就算不特意说\n我也是明白的哦。',
+   jp:'そういうことは、\nわざわざ言われなくても\n分かっていますよ。'},
+  {t:'line', s:'minoru',
+   cn:'……唉。',
+   jp:'……はあ。'},
+  {t:'line', s:'minoru',
+   cn:'算了，也好。',
+   jp:'まあ、いいでしょう。'},
+  {t:'line', s:'minoru',
+   cn:'我并不想干涉他人的命运。',
+   jp:'私は、\n他人の運命に干渉したいわけではありません。'},
+  {t:'line', s:'minoru',
+   cn:'只是，别惹出麻烦来。',
+   jp:'面倒だけは起こさないように。'},
+  {t:'line', s:'nagare',
+   cn:'好了好了，\n这种话什么时候都能说。',
+   jp:'まあまあ、\nそういう話はいつでもできるよ。'},
+  {t:'line', s:'nagare',
+   cn:'大家要不要吃点东西？\n我差不多想开茶会了呢。',
+   jp:'みんなで何か食べない？\nそろそろお茶会がしたくなってきたんだね。'},
+  {t:'line', s:'minoru',
+   cn:'又开茶会吗？',
+   jp:'また茶会ですか？'},
+  {t:'line', s:'minoru',
+   cn:'茶喝多了的后果，\n我之前说过的吧。',
+   jp:'お茶の飲みすぎがどうなるかは、\n以前お伝えしましたよね。'},
+  {t:'line', s:'minoru',
+   cn:'请不要把Conductor也卷进来，\n害得人家失眠。',
+   jp:'コンダクターまで巻き込んで、\n不眠にさせないでください。'},
+  {t:'line', s:'en',
+   cn:'反正你不是想喝茶，\n只是想吃蛋糕吧。',
+   jp:'どうせお茶が飲みたいんじゃなくて、\nケーキが食いたいだけだろう。'},
+  {t:'line', s:'nagare',
+   cn:'何必特意说出来呢。',
+   jp:'わざわざ言わなくていいじゃないか。'},
+  {t:'line', s:'nagare',
+   cn:'那么，谁来？\n还是平常那几个人就好吗？',
+   jp:'それで、誰が来る？\nいつものメンバーでいいの？'},
+  {t:'line', s:'ao',
+   cn:'我照平常那样就好。',
+   jp:'僕は、いつもどおりで\n大丈夫ですよ。'},
+  {t:'line', s:'nagare',
+   cn:'嗯，\n你要是不按平常来，\n我们可就为难了……',
+   jp:'うん、\n君はいつもどおりじゃないと\n困るしね……'},
+  {t:'line', s:'nagare',
+   cn:'那就，待会儿见。',
+   jp:'じゃあ、またあとで。'},
+  {t:'line', s:'conductor',
+   cn:'咦，苍不去吗？',
+   jp:'あれ、\nアオは行かないんですか？'},
+  {t:'line', s:'en',
+   cn:'这家伙咖啡因不耐受。\n我们禁止他参加茶会。',
+   jp:'こいつ、\nカフェインが体質に合わん。\n茶会は出禁にした。'},
+  {t:'line', s:'en',
+   cn:'而且他不吃甜的。',
+   jp:'それに、甘いものも食えない。'},
+  {t:'line', s:'minoru',
+   cn:'我也一样，\n受不了太甜的东西。',
+   jp:'私だって、\n甘すぎるものは苦手です。'},
+  {t:'line', s:'nagare',
+   cn:'不过，实每次都陪着我呢。\n谢谢你。',
+   jp:'でも、\nミノルは毎回付き合ってくれるよね。\nありがとう。'},
+  {t:'line', s:'ao',
+   cn:'呵呵，\n简直就像只有我被排除在外一样呢。',
+   jp:'ふふ、\nまるで僕だけ\n仲間はずれみたいですね。'},
+  {t:'line', s:'ao',
+   cn:'下次去猫咪咖啡厅的时候，\n漾那份猫咪点心的钱，\n能不能让我来出呢？',
+   jp:'今度、猫カフェに行くときは、\nナガレが猫におやつ代を\n僕に出させてもらえませんか？'},
+  {t:'line', s:'nagare', lv:2,
+   cn:'诶、真的吗！？',
+   jp:'えっ、本当に！？'},
+  {t:'line', s:'nagare',
+   cn:'……咳咳。\n心意我很感激，\n不过还是算了吧。',
+   jp:'……こほん。\n気持ちはありがたいけど、\n遠慮しておくよ。'},
+  {t:'line', s:'ao',
+   cn:'总是缺席你的茶会，\n我也很寂寞呢。',
+   jp:'いつも茶会を欠席してばかりで、\n僕も寂しいんですよ。'},
+  {t:'line', s:'ao',
+   cn:'还请收下我这份心意，\n可以吗？',
+   jp:'どうか、\n僕の気持ちを\n受け取ってくださいませんか？'},
+  {t:'line', s:'ao',
+   cn:'不然的话，我心里会不安的。',
+   jp:'そうしないと、\n落ち着かなくて。'},
+  {t:'line', s:'nagare',
+   cn:'……既然你都说到这份上，\n那我就恭敬不如从命了。',
+   jp:'……そこまで言うなら、\nお言葉に甘えようか。'},
+  {t:'line', s:'ao',
+   cn:'那么，\n我就先失陪了。',
+   jp:'それでは、\n僕はお先に失礼しますね。'},
+  {t:'line', s:'minoru',
+   cn:'那么，Conductor呢？\n要参加吗？',
+   jp:'それで、コンダクターは？\n参加しますか？'},
+  {t:'line', s:'conductor',
+   cn:'……',
+   jp:'……'},
+  {t:'line', s:'conductor',
+   cn:'抱歉，这次我就不去了。\n下次我一定会参加的。',
+   jp:'ごめんなさい、\n今回はやめておきます。\n次は行きますね。'},
+  {t:'line', s:'nagare',
+   cn:'嗯嗯，\n毕竟你是苍专属的Conductor呢。',
+   jp:'うんうん、\n君はアオ専属のコンダクターだもんね。'},
+  {t:'line', s:'nagare',
+   cn:'去吧。\n那孩子的身边也得有人陪着才行。',
+   jp:'行っておいで。\nあの子のそばにも、\n誰かいてあげなきゃ。'},
+  {t:'line', s:'nagare',
+   cn:'我们开茶会的时候，\n他在做什么，\n我还真有点好奇呢。',
+   jp:'僕たちがお茶会をしている間、\n何をしているのか、\nちょっと気になるんだよね。'},
+  {t:'line', s:'conductor',
+   cn:'能被理解真是太好了。',
+   jp:'分かってもらえて、\nよかったです。'},
+  {t:'line', s:'conductor',
+   cn:'那么，我就去苍那边了。',
+   jp:'じゃあ、\nアオさんのところに\n行ってきますね。'},
+  {t:'line', s:'minoru',
+   cn:'一路顺风。',
+   jp:'いってらっしゃい。'},
+  {t:'line', s:'minoru',
+   cn:'我再最后说一句。',
+   jp:'最後に一つだけ。'},
+  {t:'line', s:'minoru',
+   cn:'不管苍是什么样子，\n都请您不要吃惊。',
+   jp:'アオがどんな様子でも、\n驚かないでください。'},
+  {t:'line', s:'conductor',
+   cn:'（果然，\n我还是很在意刚才那番话啊……）',
+   jp:'（やっぱり、\nさっきの話が気になるな……）'},
+  {t:'line', s:'conductor',
+   cn:'（肯定和我有关吧。\n可是，到底是在说什么呢？）',
+   jp:'（きっと{self}に関係あることだよね。\nでも、何だろう？）'},
+  {t:'line', s:'conductor',
+   cn:'（想再了解些苍的事情啊。）',
+   jp:'（もっとアオのこと、\n知りたいな。）'},
+  {t:'card', kind:'place', key:'window'},
+  {t:'line', s:'ao',
+   cn:'……',
+   jp:'……'},
+  {t:'line', s:'conductor',
+   cn:'（他在写东西……\n现在出声会不会打扰到他？）',
+   jp:'（何か書いてる……\n声をかけても大丈夫かな？）'},
+  {t:'line', s:'conductor',
+   cn:'（稍微靠近点看看吧。）',
+   jp:'（ちょっと近くで見てみよう。）'},
+  {t:'line', s:'ao',
+   cn:'那个……\n请问您有什么事吗，Conductor？',
+   jp:'あの……。\nどうかなさいましたか、\nコンダクター？'},
+  {t:'line', s:'ao',
+   cn:'我还以为，\n您一定去和大家开茶会了呢。',
+   jp:'てっきり、\nみなさんとお茶会へ行かれたものとばかり。'},
+  {t:'line', s:'ao',
+   cn:'能请您告诉我来这里的原因吗？',
+   jp:'ここへいらした理由を、\nお聞かせいただけますか？'},
+  {t:'choice', id:'c1'},
+  {t:'line', s:'conductor',
+   cn:'你在写什么呢？',
+   jp:'何を書いてるんですか？'},
+  {t:'line', s:'ao',
+   cn:'是给粉丝们的回应。',
+   jp:'ファンの方へのお返事です。'},
+  {t:'line', s:'ao',
+   cn:'我在给收到的来信写回信哦。',
+   jp:'いただいたお手紙に、\n返事を書いているんですよ。'},
+  {t:'line', s:'ao',
+   cn:'我们大家都会写的。',
+   jp:'僕たちは、\nみんな書いているんです。'},
+  {t:'line', s:'ao',
+   cn:'就像镜子一样，\n把粉丝们的心意映照出来……',
+   jp:'鏡のように、\nファンのみなさんの気持ちを\n映せるように……'},
+  {t:'line', s:'conductor',
+   cn:'有什么我能帮上忙的吗？',
+   jp:'何か手伝えることはありますか？'},
+  {t:'line', s:'ao',
+   cn:'不用，这个我一个人就好哦。',
+   jp:'いえ、これは僕一人で大丈夫ですよ。'},
+  {t:'line', s:'ao',
+   cn:'如果不是我亲手写的，\n就没有意义了呢。',
+   jp:'僕自身が書かないと、\n意味がありませんからね。'},
+  {t:'line', s:'ao',
+   cn:'大家向支持的Rider\n倾诉的烦恼与心意，',
+   jp:'応援しているライダーに\n打ち明けてくださった\n悩みや想いには、'},
+  {t:'line', s:'ao',
+   cn:'必须要用这颗心一一回应才行。',
+   jp:'この心で\nお返ししなくては\nいけないんです。'},
+  {t:'line', s:'ao',
+   cn:'不管有多少份心意，\n都必须平静地接住才可以。',
+   jp:'どれほどたくさんの想いでも、\n穏やかに受けとめなくては。'},
+  {t:'line', s:'conductor',
+   cn:'可以问一下吗？',
+   jp:'ちょっと聞いてもいいですか？'},
+  {t:'line', s:'conductor',
+   cn:'我不知道Rider的眼中\n看到的是怎样的景色，',
+   jp:'ライダーの目に\nどんな景色が見えているのか、'},
+  {t:'line', s:'conductor',
+   cn:'所以很在意。',
+   jp:'{self}には分からなくて、\n気になるんです。'},
+  {t:'line', s:'conductor',
+   cn:'如果是不能回答的事，还请直说。',
+   jp:'答えられないことだったら、\nそう言ってくださいね。'},
+  {t:'line', s:'ao',
+   cn:'当然可以。\n能为您作答是我的荣幸哦。',
+   jp:'もちろんです。\nお答えできるなんて、\n光栄ですよ。'},
+  {t:'line', s:'conductor',
+   cn:'都会收到怎样的信呢？',
+   jp:'どんなお手紙が届くんですか？'},
+  {t:'line', s:'ao',
+   cn:'写给别人的信我无从知晓内容……',
+   jp:'他の人宛てのお手紙のことは、\n僕には分かりませんが……'},
+  {t:'line', s:'ao',
+   cn:'寄给我的，\n大多是在倾诉烦恼……',
+   jp:'僕宛てのものは、\nほとんどが悩みの打ち明け話で……'},
+  {t:'line', s:'ao',
+   cn:'里面也会附上些好意的话语。',
+   jp:'そこに、好意の言葉が添えられています。'},
+  {t:'line', s:'ao',
+   cn:'我的职责，\n就是好好地回应那份心意呢。',
+   jp:'僕の役目は、\nそのお気持ちに\nきちんとお応えすることですよ。'},
+  {t:'line', s:'conductor',
+   cn:'（粉丝们的心情，\n我好像有点明白。）',
+   jp:'（ファンの人たちの気持ち、\nなんとなく分かるな。）'},
+  {t:'line', s:'conductor',
+   cn:'（忍不住就想对他倾诉烦恼，\n想要他能站在自己这边吧。）',
+   jp:'（つい悩みを打ち明けて、\n味方になってほしくなっちゃうんだよね。）'},
+  {t:'line', s:'conductor',
+   cn:'（但是……）',
+   jp:'（でも……）'},
+  {t:'line', s:'conductor',
+   cn:'每天要接住那么多人的烦恼，\n不会很累吗？',
+   jp:'毎日たくさんの人の悩みを\n受けとめて、\nかなり疲れていませんか？'},
+  {t:'line', s:'ao', lv:1,
+   cn:'有什么累的？',
+   jp:'何が疲れる？'},
+  {t:'line', s:'conductor', lv:2,
+   cn:'诶？',
+   jp:'えっ？'},
+  {t:'line', s:'ao',
+   cn:'啊，那个……',
+   jp:'あ、ええと……'},
+  {t:'line', s:'ao',
+   cn:'偶尔，\n也会有点累就是了……',
+   jp:'たまに、\n少し疲れることもありますけれど……'},
+  {t:'line', s:'ao',
+   cn:'可是一想到\n大家都在期待着我的回信，',
+   jp:'でも、みなさんが\n僕の返事を\n楽しみにしてくださっていると思うと、'},
+  {t:'line', s:'ao',
+   cn:'就只会涌出力量来了呢。',
+   jp:'力しか湧いてこないんですよ。'},
+  {t:'line', s:'ao',
+   cn:'要我辜负那份心意，\n我做不到哦。',
+   jp:'その気持ちに応えないなんて、\nできませんよ。'},
+  {t:'line', s:'ao',
+   cn:'毕竟我们是出色的Spark Rider啊。',
+   jp:'僕たちは、\n素晴らしい\nスパークライダーですから。'},
+  {t:'line', s:'ao',
+   cn:'我们要做的，\n就是把笑容送到大家身边。',
+   jp:'僕たちのすることは、\nみんなに笑顔を届けることです。'},
+  {t:'line', s:'ao',
+   cn:'如果粉丝在难过，\n我也会跟着难过的。',
+   jp:'ファンの方が悲しんでいたら、\n僕も悲しくなってしまいます。'},
+  {t:'line', s:'conductor',
+   cn:'这样啊……',
+   jp:'そっか……'},
+  {t:'line', s:'conductor',
+   cn:'可以让我在旁边看一会儿吗？',
+   jp:'ちょっとだけ、\n隣で見ててもいいですか？'},
+  {t:'line', s:'conductor',
+   cn:'请把我当作不存在就好。',
+   jp:'{self}のことは\nいないものだと思ってください。'},
+  {t:'line', s:'ao',
+   cn:'当然可以。\n请您落座吧。',
+   jp:'もちろんです。\nどうぞ、おかけくださいね。'},
+  {t:'line', s:'conductor',
+   cn:'好，谢谢。',
+   jp:'はい、ありがとう。'},
+  {t:'line', s:'conductor',
+   cn:'（写回信时的苍，一点表情都没有……）',
+   jp:'（返事を書いてる間のアオ、\n無表情なんだ……）'},
+  {t:'line', s:'conductor',
+   cn:'（写得也很快。\n这就是所谓的专业吗。）',
+   jp:'（手もすごく速い。\nこれがプロってやつなのかな。）'},
+  {t:'line', s:'conductor',
+   cn:'（仔细看的话，\n意外地有种冷淡的感觉……）',
+   jp:'（よく見ると、\n意外と冷たい感じがする……）'},
+  {t:'line', s:'conductor',
+   cn:'（表情几乎没有变化。）',
+   jp:'（表情がほとんど動かない。）'},
+  {t:'line', s:'conductor',
+   cn:'（我这才第一次意识到，\n他原本长着一张那么冷的脸。）',
+   jp:'（本当は、\nすごく冷ややかな顔立ちなんだって、\n初めて気づいた。）'},
+  {t:'line', s:'conductor',
+   cn:'（……）',
+   jp:'（……）'},
+  {t:'line', s:'conductor',
+   cn:'（总之，\n我留在这里好像也帮不上什么。）',
+   jp:'（とにかく、\nここにいても\n{self}にできることはなさそう。）'},
+  {t:'line', s:'conductor',
+   cn:'（回去做自己的事吧。）',
+   jp:'（自分の仕事に戻ろう。）'},
+  {t:'line', s:'ao',
+   cn:'您要走了吗？',
+   jp:'もう行かれるのですか？'},
+  {t:'line', s:'conductor',
+   cn:'是的，我去确认彩排的事。',
+   jp:'はい、\nリハーサルの確認をしてきますね。'},
+  {t:'line', s:'conductor',
+   cn:'看到苍那么努力地回应粉丝，',
+   jp:'ファンの人に\n一生懸命応えてるアオを見てたら、'},
+  {t:'line', s:'conductor',
+   cn:'我也开始觉得要更努力才行了。',
+   jp:'{self}ももっと頑張らなきゃって\n思えました。'},
+  {t:'line', s:'ao',
+   cn:'这样啊……',
+   jp:'そうですか……'},
+  {t:'line', s:'ao',
+   cn:'请加油呢，Conductor。',
+   jp:'頑張ってくださいね、コンダクター。'},
+  {t:'line', s:'ao',
+   cn:'如果有什么为难的事，\n请毫不客气地对我倾诉哦。',
+   jp:'もし困ったことがあれば、\n遠慮なく僕に打ち明けてくださいね。'},
+  {t:'cg', src:'assets/cg-151.jpg'},
+  {t:'line', s:'conductor',
+   cn:'（回去之前，\n再去看一眼情况吧。）',
+   jp:'（帰る前に、\nもう一度様子を見ていこう。）'},
+  {t:'card', kind:'place', key:'window'},
+  {t:'line', s:'conductor',
+   cn:'啊，外套……\n落在资料室了。',
+   jp:'あ、上着……\n資料室に置いてきちゃった。'},
+  {t:'line', s:'conductor',
+   cn:'没办法，\n待会儿再去取吧。',
+   jp:'仕方ない、\nあとで取りに行こう。'},
+  {t:'line', s:'ao',
+   cn:'……呼。',
+   jp:'……ふう。'},
+  {t:'line', s:'conductor',
+   cn:'苍？\n还没结束吗？',
+   jp:'アオ？\nまだ終わってないんですか？'},
+  {t:'line', s:'conductor',
+   cn:'已经很晚了，\n没写完的部分留到后面也没关系的。',
+   jp:'もう遅いですし、\n終わらなかった分は\n後回しにしても大丈夫ですよ。'},
+  {t:'line', s:'ao',
+   cn:'……',
+   jp:'……'},
+  {t:'line', s:'conductor',
+   cn:'……？',
+   jp:'……？'},
+  {t:'line', s:'conductor',
+   cn:'怎、怎么了？\n从刚才起，\n你就一直盯着我的脸看。',
+   jp:'ど、どうしたんですか？\nさっきから、\nずっと{self}の顔を見てますけど。'},
+  {t:'line', s:'ao',
+   cn:'那个，',
+   jp:'あの、'},
+  {t:'line', s:'ao', lv:1,
+   cn:'恕我冒昧，\n请问您是哪位？',
+   jp:'失礼ですが、\nどちら様でしょうか？'},
+  {t:'line', s:'conductor', lv:2,
+   cn:'诶诶！？',
+   jp:'ええっ！？'},
+  {t:'line', s:'ao',
+   cn:'……',
+   jp:'……'},
+  {t:'line', s:'conductor',
+   cn:'诶？\n等等，\n你是认真的吗？',
+   jp:'えっ、\n待って、\n本気で言ってます？'},
+  {t:'line', s:'ao',
+   cn:'这个嘛，谁知道呢。',
+   jp:'さあ、どうでしょう。'},
+  {t:'choice', id:'c2'},
+  {t:'line', s:'ao',
+   cn:'啊，',
+   jp:'ぁ、'},
+  {t:'line', s:'ao', lv:1,
+   cn:'——哈、',
+   jp:'——はっ、'},
+  {t:'line', s:'ao', lv:1,
+   cn:'……糟了，',
+   jp:'……しまった、'},
+  {t:'line', s:'conductor',
+   cn:'（第一次见到他露出这样的表情……）',
+   jp:'（こんな顔、初めて見た……）'},
+  {t:'line', s:'ao',
+   cn:'Conductor，刚才那是开玩笑——',
+   jp:'コンダクター、今のは冗談で——'},
+  {t:'line', s:'conductor', lv:1,
+   cn:'如果有什么隐情，还请告诉我。',
+   jp:'何か事情があるなら、\n教えてください。'},
+  {t:'line', s:'conductor',
+   cn:'我们已经是命运共同体了。',
+   jp:'私たち、\nもう運命共同体なんですから。'},
+  {t:'line', s:'conductor',
+   cn:'再多依赖我一点也是可以的。',
+   jp:'もうちょっと{self}のこと、\n頼ってくれてもいいのです。'},
+  {t:'line', s:'ao',
+   cn:'……',
+   jp:'……'},
+  {t:'line', s:'ao',
+   cn:'也不是什么\n不能对Conductor说的事情……',
+   jp:'コンダクターに\nお話しできないような、ことでは……\nないのですが。'},
+  {t:'line', s:'ao',
+   cn:'这件事，\n目前Re:AliTea的大家都已经知道了。',
+   jp:'このことは、今のところ\nRe:AliTeaのみなさんは\n知っています。'},
+  {t:'line', s:'ao', lv:1,
+   cn:'其实，\n我有一点认知方面的障碍。',
+   jp:'実は僕、\n少し認知の障害が\nあるんです。'},
+  {t:'line', s:'ao',
+   cn:'世界在我眼里，总是有点看不清楚。',
+   jp:'世界が、\nいつもぼんやりとしか\n見えなくて。'},
+  {t:'line', s:'ao',
+   cn:'而且，要记住事情也很困难。',
+   jp:'それに、ものを覚えておくのも\n難しいんです。'},
+  {t:'line', s:'ao',
+   cn:'详细的情况我不能讲。',
+   jp:'詳しいことは、\nお話しできませんが。'},
+  {t:'line', s:'ao',
+   cn:'一定是神的诅咒……\n就像是惩罚一样的东西吧。',
+   jp:'きっと、神様の呪い……\n罰のようなものなのでしょう。'},
+  {t:'line', s:'conductor',
+   cn:'以前从来没听说过……',
+   jp:'今まで一度も聞いたことない……'},
+  {t:'line', s:'ao',
+   cn:'因为除了自己人，\n谁都不知道呢。',
+   jp:'身内以外は、\n誰も知りませんからね。'},
+  {t:'line', s:'ao',
+   cn:'Conductor在今天之内有改变外表对吧？',
+   jp:'コンダクターは今日一日で、\n見た目を変えられましたよね？'},
+  {t:'line', s:'ao',
+   cn:'再加上我写了很久的信，\n眼睛都模糊了……',
+   jp:'そこへ、\n長いこと手紙を書いていて、\n目が霞んでしまって……'},
+  {t:'line', s:'conductor',
+   cn:'所以，就看不出来我是谁了吗……？',
+   jp:'それで、{self}が誰だか\n分からなくなっちゃったんですか……？'},
+  {t:'line', s:'conductor',
+   cn:'那么，\n你现在能看清楚我的脸吗？',
+   jp:'じゃあ、\n今はちゃんと{self}の顔、\n見えてますか？'},
+  {t:'line', s:'ao',
+   cn:'看得见哦。\n刚才只是没有好好集中精神而已。',
+   jp:'見えていますよ。\nさっき、ちゃんと集中できていなかっただけです。'},
+  {t:'line', s:'ao',
+   cn:'这都是微不足道的小事哦。',
+   jp:'どれも、ほんの些細なことですよ。'},
+  {t:'line', s:'conductor',
+   cn:'为什么不告诉我呢……',
+   jp:'どうして、\n教えてくれなかったんですか……'},
+  {t:'line', s:'ao', lv:1,
+   cn:'因为都是小事。',
+   jp:'些細なことですから。'},
+  {t:'line', s:'ao',
+   cn:'只要生活上没受影响，\n就没有必要特意说出来吧？',
+   jp:'生活に支障がないのなら、\nわざわざお伝えする必要は\nないでしょう？'},
+  {t:'line', s:'ao',
+   cn:'一直以来，\nConductor也没有察觉到吧？',
+   jp:'これまでの間、\nコンダクターも\n気づいていませんでしたよね？'},
+  {t:'line', s:'conductor',
+   cn:'（确实。\n我只觉得他有点健忘……）',
+   jp:'（たしかに。\n忘れっぽいなとは思ってたけど……）'},
+  {t:'line', s:'ao',
+   cn:'而且，\n如果突然知道负责的Rider有这种问题的话，',
+   jp:'それに、\n担当ライダーにこんな問題があると\n突然知ったら、'},
+  {t:'line', s:'ao',
+   cn:'一定会觉得害怕吧。',
+   jp:'きっと怖いと思うんです。'},
+  {t:'line', s:'ao',
+   cn:'我不想让人害怕……',
+   jp:'人を怖がらせたくなくて……'},
+  {t:'line', s:'ao',
+   cn:'也不想看到谁难过的样子。',
+   jp:'誰かが悲しむ姿も、\n見たくありませんし。'},
+  {t:'line', s:'ao',
+   cn:'更何况您还是我最重要的Conductor。',
+   jp:'ましてや君は\n僕の大切なコンダクターですから。'},
+  {t:'line', s:'ao',
+   cn:'可是，既然已经被知道了，\n那也没办法了呢。',
+   jp:'でも、知られてしまった以上、\n仕方ありませんね。'},
+  {t:'line', s:'ao',
+   cn:'我们之间的距离，\n又稍微缩短了一些呢。',
+   jp:'僕たち、\nまた少し距離が\n縮まりましたね。'},
+  {t:'line', s:'ao',
+   cn:'Conductor，\n我可以把您当成自己人吗？',
+   jp:'コンダクター、\n君を身内だと思ってもいいですか？'},
+  {t:'line', s:'conductor',
+   cn:'当然可以。\n正是这种烦恼，\n才更应该好好告诉我。',
+   jp:'もちろんです。\nそういう悩みこそ、\nちゃんと教えてほしいです。'},
+  {t:'line', s:'ao',
+   cn:'好的。我会的。',
+   jp:'はい。そうしますね。'},
+  {t:'line', s:'ao',
+   cn:'因为我是个好孩子嘛。',
+   jp:'僕は、いい子ですから。'},
+  {t:'line', s:'ao',
+   cn:'今天的事，\n请对其他人保密哦。',
+   jp:'今日のことは、\n他の人には内緒にしてくださいね。'},
+  {t:'line', s:'ao',
+   cn:'这是只属于我们两个人的，秘密。',
+   jp:'二人だけの、秘密です。'},
+];
+
+const CHOICES = {
+  c1:{options:[
+    {cn:'不想让你一个人。', jp:'君を一人にしたくなかった。', branch:[
+      {t:'line', s:'ao',
+       cn:'我不是小孩子哦。',
+       jp:'僕は子どもではありませんよ。'},
+      {t:'line', s:'ao',
+       cn:'不必为我费心。\n请顺着您自己的心情去行动就好呢。',
+       jp:'僕に気を遣わなくていいんです。\nご自分の気持ちのままに\n過ごしてくださいね。'},
+      {t:'line', s:'ao',
+       cn:'不过，对于您的温柔，\n我果然很高兴哦。',
+       jp:'でも、君の優しさは、\nやっぱり嬉しいですよ。'},
+    ]},
+    {cn:'想和你在一起。', jp:'君と一緒にいたかった。', branch:[
+      {t:'line', s:'ao',
+       cn:'……！',
+       jp:'……っ！'},
+      {t:'line', s:'ao',
+       cn:'啊，嗯。\n那个，呃……\n……抱歉。',
+       jp:'あ、うん。\nその、えっと……。\n……すみません。'},
+      {t:'line', s:'ao',
+       cn:'不，没什么。',
+       jp:'いえ、なんでもありません。'},
+    ]}
+  ]},
+  c2:{options:[
+    {cn:'我是{name}啊。\n是苍的Conductor。', jp:'{self}は{name}ですよ。\nアオさんのコンダクターの。', branch:[]}
+  ]}
+};
+
+const PLACES = {
+  main:{
+    cn:'米拉比利斯大厦\n咖啡区「Tea Lounge」',
+    jp:'ミラビリス・ビル\nカフェスペース「Tea Lounge」'
+  },
+  window:{
+    cn:'米拉比利斯大厦\n窗边工作区',
+    jp:'ミラビリス・ビル\n窓際ワークスペース'
+  }
+};
+const PLACE = PLACES.main;
+
+const TITLE = {
+  kicker:{cn:'{  个人故事  }', jp:'{  パーソナルストーリー  }'},
+  sub:   {cn:'苍', jp:'アオ'},
+  gold:  {cn:'第 2 话', jp:'第 2 話'},
+  main:  {cn:'记忆深处残留的事物', jp:'記憶の奥に残るもの'}
+};
+
+const NEXT = null;
+
+const SPEAKERS = {
+  ao:        {cn:'苍',     jp:'アオ',        color:'#c7ced4'},
+  nagare:    {cn:'漾',     jp:'ナガレ',      color:'#bf8fff'},
+  minoru:    {cn:'实',     jp:'ミノル',      color:'#61c4cf'},
+  en:        {cn:'远',     jp:'エン',        color:'#ffb5c5'},
+  conductor: {cn:'{name}', jp:'{name}',      color:'#4f3f78'}
+};
+
+/* =========================================================
+   状态
+   ========================================================= */
+const STORE_KEY = 'starfall-reader-v1';
+const settings = { cn:'京', jp:'キョウ', useJp:true, self:'私', speed:2 };
+let lang = 'cn';
+/* 打字间隔倍率：0 = 不逐字，直接整句出现 */
+const SPEEDS = [1.9, 1.35, 1, 0.65, 0];
+const CARD_MS = 2700;
+const CG_MS = 1750;
+
+const state = {
+  ptr: 0,               // STORY 里的下一个事件
+  extra: 0,             // 已进入的支线总数（用于进度）
+  branch: [],           // 当前选项的支线，逐条播完再回主线
+  timeline: [],         // 已渲染的块
+  typing: false, shown: 0, timer: null,
+  pendingChoice: null,
+  cardT: 0, cardEl: null,
+  cgT: 0,
+  ended: false,
+  nextShown: false,
+  run: 0
+};
+let active = null;
+let rafQueued = false;
+let cardSeq = 0;
+
+const app        = document.getElementById('app');
+const transcript = document.getElementById('transcript');
+const thumb      = document.getElementById('thumb');
+const whoLabel   = document.getElementById('whoLabel');
+const segLang    = document.getElementById('segLang');
+const mask       = document.getElementById('mask');
+const sheetProfile = document.getElementById('sheetProfile');
+const nameCn     = document.getElementById('nameCn');
+const nameJp     = document.getElementById('nameJp');
+const useJp      = document.getElementById('useJp');
+const jpField    = document.getElementById('jpField');
+const selfChips  = document.getElementById('selfChips');
+const speedRange = document.getElementById('speedRange');
+
+/* ---------- 存取 ---------- */
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return;
+    const saved = JSON.parse(raw);
+    if(typeof saved.cn === 'string' && saved.cn) settings.cn = saved.cn;
+    if(typeof saved.jp === 'string' && saved.jp) settings.jp = saved.jp;
+    if(typeof saved.useJp === 'boolean') settings.useJp = saved.useJp;
+    if(['私','俺','自分','僕'].indexOf(saved.self) >= 0) settings.self = saved.self;
+    if(typeof saved.speed === 'number' && saved.speed >= 0 && saved.speed <= 4) settings.speed = saved.speed;
+    if(saved.lang === 'jp' || saved.lang === 'cn') lang = saved.lang;
+  }catch(e){}
+}
+function persist(){
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      cn:settings.cn, jp:settings.jp, useJp:settings.useJp, self:settings.self, lang:lang, speed:settings.speed
+    }));
+  }catch(e){}
+}
+
+/* ---------- 文案替换 ---------- */
+function nameFor(l){
+  if(l === 'jp') return (settings.useJp ? settings.jp : settings.cn) || (settings.useJp ? 'キョウ' : '京');
+  return settings.cn || '京';
+}
+function fill(text, l){
+  if(!text) return '';
+  let t = text.split('{name}').join(nameFor(l));
+  t = t.split('{self}').join(l === 'jp' ? settings.self : '我');
+  return t;
+}
+function speakerName(key, l){
+  const sp = SPEAKERS[key];
+  return fill(l === 'jp' ? sp.jp : sp.cn, l);
+}
+function each(list, fn){ Array.prototype.forEach.call(list, fn); }
+/* 名签文字统一白色，靠投影在浅色缎带上也读得清 */
+function inkFor(){
+  return '#ffffff';
+}
+
+/* =========================================================
+   逐行渲染（n === null 表示直接给全文）
+   ========================================================= */
+function makeLine(key, text, lv, n){
+  const el = document.createElement('div');
+  el.className = 'line' + (lv ? ' lv' + lv : '');
+
+  const sp = SPEAKERS[key];
+  const tag = document.createElement('div');
+  tag.className = 'tag';
+  tag.style.setProperty('--c', sp.color);
+  const ink = inkFor(sp.color);
+  tag.style.setProperty('--c-ink', ink);
+  tag.style.setProperty('--c-ts', ink === '#ffffff' ? '0 1px 0 rgba(0,0,0,.3)' : 'none');
+  tag.textContent = speakerName(key, lang);
+  el.appendChild(tag);
+
+  const say = document.createElement('div');
+  say.className = 'say';
+  const txt = document.createElement('span');
+  say.appendChild(txt);
+  el.appendChild(say);
+  transcript.appendChild(el);
+
+  const full = text;
+  txt.textContent = full.slice(0, n === null ? full.length : n);
+  return {txt: txt, full: full, el: el};
+}
+
+/* =========================================================
+   题记
+   ========================================================= */
+function buildQuote(animate){
+  const card = document.createElement('div');
+  card.className = 'quotecard' + (animate ? '' : ' no-anim');
+  const body = document.createElement('div');
+  body.className = 'qc-body';
+  body.appendChild(rule());
+  const t = document.createElement('p');
+  t.className = 'qc-text';
+  t.textContent = QUOTE[lang];
+  body.appendChild(t);
+  body.appendChild(rule());
+  card.appendChild(body);
+  return card;
+}
+function rule(){
+  const d = document.createElement('div');
+  d.className = 'qc-rule';
+  return d;
+}
+
+/* =========================================================
+   地点框
+   ========================================================= */
+const SPARK_PATH = 'M12 0 C13 7.2 16.8 11 24 12 C16.8 13 13 16.8 12 24 C11 16.8 7.2 13 0 12 C7.2 11 11 7.2 12 0 Z';
+const DIAMOND_PATH = 'M12 0.8 L13.6 10.4 L23.2 12 L13.6 13.6 L12 23.2 L10.4 13.6 L0.8 12 L10.4 10.4 Z';
+
+function spark(x, y, size, opacity){
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 24 24');
+  svg.setAttribute('class','pc-spark');
+  svg.style.left = x;
+  svg.style.top = y;
+  svg.style.width = size + 'px';
+  svg.style.height = size + 'px';
+  svg.style.opacity = opacity;
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d', SPARK_PATH);
+  p.setAttribute('fill', '#d3b681');
+  svg.appendChild(p);
+  return svg;
+}
+
+function buildPlace(animate, key){
+  const src = PLACES[key] || PLACES.main;
+  const card = document.createElement('div');
+  card.className = 'placecard' + (animate ? '' : ' no-anim');
+
+  const spots = [
+    {x:'3.5%',  y:'16%',  s:22, o:.72},
+    {x:'9%',    y:'58%',  s:11, o:.48},
+    {x:'1.5%',  y:'78%',  s:7,  o:.38},
+    {x:'13%',   y:'7%',   s:8,  o:.42},
+    {x:'88%',   y:'13%',  s:9,  o:.48},
+    {x:'93%',   y:'46%',  s:20, o:.68},
+    {x:'84%',   y:'84%',  s:8,  o:.38},
+    {x:'97%',   y:'74%',  s:9,  o:.42},
+    {x:'46%',   y:'-5%',  s:8,  o:.32},
+    {x:'60%',   y:'93%',  s:7,  o:.3}
+  ];
+  spots.forEach(function(sp){ card.appendChild(spark(sp.x, sp.y, sp.s, sp.o)); });
+
+  const body = document.createElement('div');
+  body.className = 'pc-body';
+
+  const name = document.createElement('p');
+  name.className = 'pc-name' + (src[lang].length > 12 ? ' small' : '');
+  name.textContent = src[lang];
+  body.appendChild(name);
+
+  const r = document.createElement('div');
+  r.className = 'pc-rule';
+  r.appendChild(document.createElement('span'));
+  r.appendChild(document.createElement('i'));
+  r.appendChild(document.createElement('span'));
+  body.appendChild(r);
+
+  card.appendChild(body);
+  return card;
+}
+
+/* =========================================================
+   标题框
+   ========================================================= */
+function wave(pos, from, to, isTop, seq){
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('class','tc-wave ' + pos);
+  svg.setAttribute('viewBox','0 0 100 10');
+  svg.setAttribute('preserveAspectRatio','none');
+  svg.setAttribute('aria-hidden','true');
+
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  const gid = 'wg-' + pos + '-' + seq;
+  const grad = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+  grad.setAttribute('id', gid);
+  grad.setAttribute('gradientUnits','objectBoundingBox');
+  grad.setAttribute('x1','0'); grad.setAttribute('y1', isTop ? '0' : '1');
+  grad.setAttribute('x2','0'); grad.setAttribute('y2', isTop ? '1' : '0');
+  const s1 = document.createElementNS('http://www.w3.org/2000/svg','stop');
+  s1.setAttribute('offset','0'); s1.setAttribute('stop-color', from);
+  const s2 = document.createElementNS('http://www.w3.org/2000/svg','stop');
+  s2.setAttribute('offset','1'); s2.setAttribute('stop-color', to);
+  grad.appendChild(s1); grad.appendChild(s2);
+  defs.appendChild(grad);
+  svg.appendChild(defs);
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  const d = isTop
+    ? 'M0 0 H100 V4.2 C86 7.4 74 3 52 5.6 C30 8.2 16 3.2 0 4.8 Z'
+    : 'M0 10 H100 V5.8 C86 2.6 74 7 52 4.4 C30 1.8 16 6.8 0 5.2 Z';
+  path.setAttribute('d', d);
+  path.setAttribute('fill', 'url(#' + gid + ')');
+  svg.appendChild(path);
+  return svg;
+}
+
+function flourish(side){
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 44 16');
+  svg.setAttribute('class','fl ' + side);
+  svg.setAttribute('aria-hidden','true');
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d','M40 8 L14 8 C7 8 5 12.5 8.5 12.8 C12 13 12.6 8.6 9.4 8 C6.4 7.4 3.5 9.6 2.5 12.2');
+  p.setAttribute('fill','none');
+  p.setAttribute('stroke','#bfa06a');
+  p.setAttribute('stroke-width','1.1');
+  p.setAttribute('stroke-linecap','round');
+  svg.appendChild(p);
+  return svg;
+}
+
+function buildTitle(animate){
+  const card = document.createElement('div');
+  card.className = 'titlecard' + (animate ? '' : ' no-anim');
+  cardSeq++;
+
+  const glow = document.createElement('div');
+  glow.className = 'tc-glow';
+  card.appendChild(glow);
+
+  card.appendChild(wave('top', '#7fe3f5', '#c9f4fb', true, cardSeq));
+  card.appendChild(wave('bottom', '#54cde9', '#c9f4fb', false, cardSeq));
+
+  const stars = [
+    {x:'6%',  y:'22%', s:26, o:.75},
+    {x:'17%', y:'10%', s:13, o:.5},
+    {x:'30%', y:'20%', s:8,  o:.35},
+    {x:'88%', y:'24%', s:24, o:.7},
+    {x:'75%', y:'9%',  s:12, o:.45},
+    {x:'10%', y:'74%', s:18, o:.6},
+    {x:'24%', y:'86%', s:9,  o:.35},
+    {x:'92%', y:'70%', s:16, o:.55},
+    {x:'70%', y:'88%', s:8,  o:.3}
+  ];
+  stars.forEach(function(st){
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24');
+    svg.setAttribute('class','tc-star');
+    svg.style.left = st.x;
+    svg.style.top = st.y;
+    svg.style.width = st.s + 'px';
+    svg.style.height = st.s + 'px';
+    svg.style.opacity = st.o;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d', DIAMOND_PATH);
+    p.setAttribute('fill', '#d9bd8a');
+    svg.appendChild(p);
+    card.appendChild(svg);
+  });
+
+  const body = document.createElement('div');
+  body.className = 'tc-body';
+
+  const type = document.createElement('p');
+  type.className = 'tc-type';
+  type.textContent = TITLE.kicker[lang];
+  body.appendChild(type);
+
+  const cast = document.createElement('p');
+  cast.className = 'tc-cast';
+  cast.textContent = TITLE.sub[lang];
+  body.appendChild(cast);
+
+  const r = document.createElement('div');
+  r.className = 'tc-rule';
+  r.appendChild(document.createElement('span'));
+  r.appendChild(document.createElement('i'));
+  r.appendChild(document.createElement('span'));
+  body.appendChild(r);
+
+  const ep = document.createElement('p');
+  ep.className = 'tc-ep';
+  ep.appendChild(flourish('left'));
+  const epTxt = document.createElement('span');
+  epTxt.textContent = TITLE.gold[lang];
+  ep.appendChild(epTxt);
+  ep.appendChild(flourish('right'));
+  body.appendChild(ep);
+
+  const title = document.createElement('h3');
+  title.className = 'tc-title';
+  title.textContent = TITLE.main[lang];
+  body.appendChild(title);
+
+  card.appendChild(body);
+  return card;
+}
+
+function buildCard(kind, animate, key){
+  if(kind === 'quote') return buildQuote(animate);
+  if(kind === 'place') return buildPlace(animate, key);
+  return buildTitle(animate);
+}
+
+/* 插图：run 时走右进左出特效，否则静态展示（重绘用） */
+function buildCg(src, animate){
+  const wrap = document.createElement('div');
+  wrap.className = 'cgcard' + (animate ? ' run' : '');
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = '';
+  img.setAttribute('draggable','false');
+  wrap.appendChild(img);
+  return wrap;
+}
+
+/* =========================================================
+   点选框
+   ========================================================= */
+function sparkCluster(){
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 40 40');
+  svg.setAttribute('class','spark');
+  svg.setAttribute('aria-hidden','true');
+  const specs = [
+    {x:22, y:2,  s:15, o:.85},
+    {x:8,  y:14, s:8,  o:.55},
+    {x:27, y:22, s:6,  o:.45},
+    {x:14, y:30, s:5,  o:.35}
+  ];
+  specs.forEach(function(sp){
+    const el = document.createElementNS('http://www.w3.org/2000/svg','path');
+    el.setAttribute('d', SPARK_PATH);
+    el.setAttribute('fill', '#d9bd8a');
+    el.setAttribute('opacity', sp.o);
+    el.setAttribute('transform', 'translate(' + sp.x + ',' + sp.y + ') scale(' + (sp.s / 24) + ')');
+    svg.appendChild(el);
+  });
+  return svg;
+}
+
+function buildChoice(id, animate){
+  const data = CHOICES[id];
+  const box = document.createElement('div');
+  box.className = 'choicebox';
+  data.options.forEach(function(opt, i){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'opt';
+    btn.style.animationDelay = (i * 0.08) + 's';
+    if(!animate) btn.style.animation = 'none';
+
+    const txt = document.createElement('span');
+    txt.className = 'opt-txt';
+    txt.textContent = fill(opt[lang], lang);
+    btn.appendChild(txt);
+    btn.appendChild(sparkCluster());
+
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      pickChoice(id, opt);
+    });
+    box.appendChild(btn);
+  });
+  return box;
+}
+
+function openChoice(id, animate){
+  state.pendingChoice = id;
+  transcript.appendChild(buildChoice(id, animate !== false));
+  keepBottom();
+}
+
+function pickChoice(id, opt){
+  if(state.pendingChoice !== id) return;
+
+  const box = transcript.querySelector('.choicebox');
+  if(box){
+    box.classList.add('gone');
+    setTimeout(function(){ if(box.parentNode) box.remove(); }, 300);
+  }
+  state.pendingChoice = null;
+
+  /* 选中的那句，作为主控台词接进对话 */
+  state.timeline.push({kind:'chosen', opt:opt});
+  const rate = SPEEDS[settings.speed] === undefined ? 1 : SPEEDS[settings.speed];
+  active = makeLine('conductor', fill(opt[lang], lang), 0, rate > 0 ? 0 : null);
+  state.shown = rate > 0 ? 0 : active.full.length;
+  state.typing = rate > 0;
+
+  /* 之后的支线 */
+  const br = opt.branch || [];
+  state.branch = br.slice();
+  state.extra += br.length;
+
+  keepBottom();
+  updateProgress();
+  tick();
+}
+
+/* =========================================================
+   打字机
+   ========================================================= */
+function keepBottom(){
+  if(rafQueued) return;
+  rafQueued = true;
+  requestAnimationFrame(function(){
+    rafQueued = false;
+    transcript.scrollTop = transcript.scrollHeight;
+  });
+}
+
+function delayFor(ch){
+  if(ch === '。' || ch === '！' || ch === '？') return 240;
+  if('，、；：…—―'.indexOf(ch) >= 0) return 120;
+  if(ch === '　') return 80;
+  return 30;
+}
+
+function tick(){
+  if(!state.typing || !active) return;
+  if(state.shown >= active.full.length){ finishTyping(); return; }
+  const ch = active.full[state.shown];
+  state.shown++;
+  active.txt.textContent = active.full.slice(0, state.shown);
+  keepBottom();
+  const rate = SPEEDS[settings.speed] === undefined ? 1 : SPEEDS[settings.speed];
+  state.timer = setTimeout(tick, (state.shown <= 1 ? 90 : delayFor(ch)) * rate);
+}
+
+function finishTyping(){
+  if(!active) return;
+  clearTimeout(state.timer);
+  state.typing = false;
+  state.shown = active.full.length;
+  active.txt.textContent = active.full;
+  keepBottom();
+  updateProgress();
+  maybeEnd();
+}
+
+/* =========================================================
+   推进：卡片也算「一句」，一次点击只出一个内容
+   ========================================================= */
+function playLine(ev, animateTyping){
+  const rate = SPEEDS[settings.speed] === undefined ? 1 : SPEEDS[settings.speed];
+  const anim = !!animateTyping && rate > 0;
+  state.timeline.push({kind:'line', ev:ev});
+  active = makeLine(ev.s, fill(ev[lang], lang), ev.lv || 0, anim ? 0 : null);
+  state.shown = anim ? 0 : active.full.length;
+  state.typing = anim;
+  keepBottom();
+  updateProgress();
+  if(anim) tick();
+}
+
+function advance(userTap){
+  if(state.pendingChoice) return;     // 等玩家点选
+  if(state.cgT) return;               // 插图特效播放中，不再接受点击
+
+  if(state.cardT && Date.now() - state.cardT < CARD_MS){ finishCard(); return; }
+  if(state.typing){ finishTyping(); return; }
+  if(state.ended){ showNextLink(); return; }
+
+  /* 选项支线优先 */
+  if(state.branch.length){
+    const ev = state.branch.shift();
+    playLine(ev, true);
+    maybeEnd();
+    return;
+  }
+
+  if(state.ptr >= STORY.length){ maybeEnd(); return; }
+
+  const ev = STORY[state.ptr];
+
+  if(ev.t === 'card'){
+    state.ptr++;
+    state.timeline.push({kind:'card', card:ev.kind, key:ev.key});
+    const el = buildCard(ev.kind, true, ev.key);
+    transcript.appendChild(el);
+    state.cardEl = el;
+    state.cardT = Date.now();
+    keepBottom();
+    updateProgress();
+    return;
+  }
+
+  if(ev.t === 'choice'){
+    state.ptr++;
+    openChoice(ev.id, true);
+    updateProgress();
+    return;
+  }
+
+  /* 插图特效：和下一句算同一次点击 —— 播完自动接下一句，不用再点 */
+  if(ev.t === 'cg'){
+    state.ptr++;
+    state.timeline.push({kind:'cg', src:ev.src});
+    const g = buildCg(ev.src, true);
+    transcript.appendChild(g);
+    keepBottom();
+    updateProgress();
+    state.cgT = Date.now();
+    state.cgTimer = setTimeout(function(){
+      if(g.parentNode) g.remove();
+      state.cgT = 0;
+      state.cgTimer = null;
+      advance(true);
+    }, CG_MS);
+    return;
+  }
+
+  state.ptr++;
+  playLine(ev, true);
+}
+
+function finishCard(){
+  if(state.cardEl) state.cardEl.classList.add('finish');
+  state.cardEl = null;
+  state.cardT = 0;
+  keepBottom();
+}
+
+/* =========================================================
+   结尾 / 重来
+   ========================================================= */
+function maybeEnd(){
+  if(state.ended) return;
+  if(state.typing || state.pendingChoice) return;
+  if(state.ptr < STORY.length || state.branch.length) return;
+  state.ended = true;
+  setTimeout(function(){ if(state.ended) appendEnd(); }, 560);
+}
+
+function appendEnd(){
+  const old = transcript.querySelector('.end');
+  if(old) old.remove();
+  const end = document.createElement('div');
+  end.className = 'end';
+  const mark = document.createElement('p');
+  mark.className = 'tc';
+  mark.textContent = 'To be continued...';
+  end.appendChild(mark);
+  transcript.appendChild(end);
+  updateProgress();
+  keepBottom();
+}
+
+/* 结尾之后再多点一下，出现下一话入口 */
+function appendNextLink(){
+  const old = transcript.querySelector('.nextlink');
+  if(old) old.remove();
+  if(!NEXT) return;
+  const box = document.createElement('div');
+  box.className = 'nextlink';
+  const a = document.createElement('a');
+  a.href = NEXT.href;
+  a.textContent = '【' + (lang === 'jp' ? '続きを読む' : '继续阅读') +
+    '　' + NEXT.no[lang] + '　' + NEXT.title[lang] + '】';
+  box.appendChild(a);
+  transcript.appendChild(box);
+  keepBottom();
+}
+
+function showNextLink(){
+  if(!NEXT || state.nextShown) return;
+  state.nextShown = true;
+  appendNextLink();
+}
+
+function startStory(){
+  clearTimeout(state.timer);
+  clearTimeout(state.cgTimer);
+  state.cgTimer = null;
+  state.run++;
+  transcript.innerHTML = '';
+  state.ptr = 0;
+  state.extra = 0;
+  state.branch = [];
+  state.timeline = [];
+  state.typing = false;
+  state.shown = 0;
+  state.pendingChoice = null;
+  state.ended = false;
+  state.nextShown = false;
+  state.cardT = 0;
+  state.cardEl = null;
+  state.cgT = 0;
+  active = null;
+  updateProgress();
+  advance(false);   // 只出第一个内容，不需要任何点击
+}
+
+/* =========================================================
+   语言切换 / 改名字后的原地重绘
+   ========================================================= */
+function rerender(restartTyping){
+  clearTimeout(state.timer);
+  state.typing = false;
+  transcript.innerHTML = '';
+  active = null;
+  state.cardT = 0;
+  state.cardEl = null;
+  clearTimeout(state.cgTimer);
+  state.cgTimer = null;
+  state.cgT = 0;
+
+  const items = state.timeline;
+  items.forEach(function(it, i){
+    const isLast = i === items.length - 1;
+    if(it.kind === 'card'){
+      transcript.appendChild(buildCard(it.card, false, it.key));
+    }else if(it.kind === 'cg'){
+      transcript.appendChild(buildCg(it.src, false));
+    }else if(it.kind === 'line'){
+      active = makeLine(it.ev.s, fill(it.ev[lang], lang), it.ev.lv || 0, isLast && restartTyping ? 0 : null);
+    }else if(it.kind === 'chosen'){
+      active = makeLine('conductor', fill(it.opt[lang], lang), 0, isLast && restartTyping ? 0 : null);
+    }
+  });
+
+  if(restartTyping && active){
+    state.shown = 0;
+    state.typing = true;
+    tick();
+  }else{
+    state.shown = active ? active.full.length : 0;
+  }
+
+  if(state.pendingChoice) openChoice(state.pendingChoice, false);
+  if(state.ended) appendEnd();
+  if(state.nextShown) appendNextLink();
+  updateProgress();
+  keepBottom();
+}
+
+function setLang(l){
+  if(l === lang) return;
+  lang = l;
+  document.body.dataset.lang = l;
+  each(segLang.querySelectorAll('button'), function(b){
+    b.setAttribute('aria-pressed', b.dataset.lang === l ? 'true' : 'false');
+  });
+  refreshWho();
+  persist();
+  rerender(state.typing);
+}
+
+/* =========================================================
+   进度条
+   ========================================================= */
+function updateProgress(){
+  const total = STORY.length + state.extra;
+  const done = state.ended ? total : Math.min(total, state.ptr + (state.extra - state.branch.length));
+  const p = total ? Math.max(0, Math.min(1, done / total)) : 0;
+  const trackH = thumb.parentElement ? thumb.parentElement.clientHeight : 0;
+  const th = 24;
+  thumb.style.transform = 'translateY(' + (p * Math.max(0, trackH - th)) + 'px)';
+}
+
+/* =========================================================
+   顶栏与弹层
+   ========================================================= */
+function refreshWho(){
+  whoLabel.textContent = lang === 'jp' ? nameFor('jp') : nameFor('cn');
+}
+
+function openSheet(which){
+  sheetProfile.hidden = which !== 'profile';
+  mask.hidden = false;
+  mask.classList.add('open');
+  if(which === 'profile'){
+    nameCn.value = settings.cn;
+    nameJp.value = settings.jp;
+    useJp.checked = settings.useJp;
+    jpField.style.display = settings.useJp ? '' : 'none';
+    each(selfChips.querySelectorAll('.chip'), function(c){
+      c.setAttribute('aria-pressed', c.dataset.self === settings.self ? 'true' : 'false');
+    });
+    speedRange.value = String(settings.speed);
+  }
+}
+
+function closeSheet(){
+  mask.classList.remove('open');
+  mask.hidden = true;
+}
+
+document.getElementById('btnProfile').addEventListener('click', function(){ openSheet('profile'); });
+document.getElementById('btnExit').addEventListener('click', function(){
+  location.href = '角色故事目录.html';
+});
+document.getElementById('btnCancel').addEventListener('click', closeSheet);
+
+speedRange.addEventListener('input', function(){
+  const v = Number(speedRange.value);
+  settings.speed = (v >= 0 && v <= 4) ? v : 2;
+  persist();
+});
+
+useJp.addEventListener('change', function(){
+  jpField.style.display = useJp.checked ? '' : 'none';
+  if(useJp.checked && !nameJp.value.trim()) nameJp.value = 'キョウ';
+});
+
+selfChips.addEventListener('click', function(e){
+  const b = e.target.closest('.chip');
+  if(!b) return;
+  each(selfChips.querySelectorAll('.chip'), function(c){
+    c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+  });
+});
+
+document.getElementById('btnSave').addEventListener('click', function(){
+  settings.cn = nameCn.value.trim() || '京';
+  settings.useJp = useJp.checked;
+  settings.jp = nameJp.value.trim() || 'キョウ';
+  const picked = selfChips.querySelector('.chip[aria-pressed="true"]');
+  settings.self = picked ? picked.dataset.self : '私';
+  persist();
+  refreshWho();
+  closeSheet();
+  rerender(false);
+});
+
+segLang.addEventListener('click', function(e){
+  const b = e.target.closest('button[data-lang]');
+  if(b) setLang(b.dataset.lang);
+});
+
+/* 点屏幕推进 */
+app.addEventListener('click', function(e){
+  if(e.target.closest('button')) return;
+  if(!mask.hidden) return;
+  advance(true);
+});
+
+transcript.addEventListener('click', function(e){
+  const b = e.target.closest('[data-restart]');
+  if(b){ e.stopPropagation(); startStory(); }
+});
+
+document.addEventListener('keydown', function(e){
+  if(!mask.hidden){
+    if(e.key === 'Escape') closeSheet();
+    return;
+  }
+  if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); advance(true); }
+});
+
+mask.addEventListener('click', function(e){
+  if(e.target === mask) closeSheet();
+});
+
+window.addEventListener('resize', function(){ updateProgress(); });
+
+/* =========================================================
+   启动
+   ========================================================= */
+load();
+document.body.dataset.lang = lang;
+each(segLang.querySelectorAll('button'), function(b){
+  b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false');
+});
+refreshWho();
+startStory();
+</script>
+</body>
+</html>

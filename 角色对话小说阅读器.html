@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ao·第一话 作为命运共同体</title>
+<title>Ao·第1话 作为命运共同体</title>
 <meta name="theme-color" content="#15161d">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2315161d'/%3E%3Cpath d='M5 9h17l-4 14H2z' fill='%2389bc3e'/%3E%3Cpath d='M14 9h17l-4 14h-16z' fill='%234f3f78'/%3E%3C/svg%3E">
 <style>
@@ -21,6 +21,13 @@
     font-style:normal;
     font-display:swap;
   }
+  @font-face{
+    font-family:"Bacchus";
+    src:url("Bacchus-Light-2.ttf") format("truetype");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
 
   :root{
     --bg:#15161d;
@@ -31,10 +38,11 @@
     --gold:#c9a96b;
     --gold-soft:#d9bd8a;
     --navy:#232a42;
-    --base-fs:16px;
+    --base-fs:15px;
     --notch:9px;
     --font-cn:"SourceHanSC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
     --font-jp:"YuGothicWeb","Yu Gothic","Hiragino Sans","Meiryo","PingFang SC",sans-serif;
+    --font-latin:"Bacchus","Yu Gothic","PingFang SC",sans-serif;
   }
 
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -138,8 +146,8 @@
   .tag{
     display:inline-flex;
     align-items:center;
-    height:32px;
-    padding:0 26px 0 13px;
+    height:26px;
+    padding:0 24px 0 12px;
     background:var(--c);
     color:var(--c-ink,#fff);
     font-size:var(--base-fs);
@@ -159,8 +167,8 @@
     word-break:break-word;
     text-shadow:0 1px 3px rgba(0,0,0,.45);
   }
-  .line.lv1{--fs:20px}
-  .line.lv2{--fs:24px}
+  .line.lv1{--fs:19px}
+  .line.lv2{--fs:23px}
   .line.lv2 .say{line-height:1.68}
 
   @keyframes cardIn{
@@ -168,6 +176,26 @@
     to{opacity:1;transform:none}
   }
   @keyframes bodyIn{from{opacity:0}to{opacity:1}}
+
+  /* ===== 剧情插图：横幅切入，右进渐显 → 停留 0.6s → 左出渐隐 ===== */
+  .cgcard{
+    position:relative;
+    margin:2px 0 28px -22px;
+    width:calc(100% + 44px);
+    height:clamp(150px, 30vh, 230px);
+    overflow:hidden;
+    background:transparent;
+    mask-image:linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    -webkit-mask-image:linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  }
+  .cgcard img{display:block;width:100%;height:100%;object-fit:cover}
+  .cgcard.run{animation:cgRun 1.75s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes cgRun{
+    0%{opacity:0;transform:translateX(22%)}
+    32%{opacity:1;transform:translateX(0)}
+    68%{opacity:1;transform:translateX(0)}
+    100%{opacity:0;transform:translateX(-22%)}
+  }
 
   /* ===== 题记 ===== */
   .quotecard{
@@ -197,7 +225,7 @@
   .placecard{
     position:relative;
     margin:2px 0 26px;
-    padding:38px 26px 28px;
+    padding:19px 26px 13px;
     border-radius:20px;
     background:#fcfdff;
     box-shadow:0 18px 40px rgba(0,0,0,.42), 0 0 0 1px rgba(255,255,255,.55) inset;
@@ -216,18 +244,18 @@
   .pc-name{
     margin:0;
     color:var(--navy);
-    font-size:clamp(20px,5.5vw,26px);
+    font-size:clamp(17px,4.7vw,23px);
     font-weight:700;
     line-height:1.5;
     letter-spacing:.045em;
     white-space:pre-wrap;
   }
-  .pc-name.small{font-size:clamp(16px,4.4vw,20px);line-height:1.7}
+  .pc-name.small{font-size:clamp(13px,3.8vw,17px);line-height:1.7}
   .pc-rule{
     display:flex;
     align-items:center;
     width:74%;
-    margin:16px auto 0;
+    margin:11px auto 0;
     gap:9px;
   }
   .pc-rule span{
@@ -248,7 +276,7 @@
   .titlecard{
     position:relative;
     margin:2px 0 34px;
-    height:clamp(258px, 40vh, 336px);
+    height:clamp(232px, 33vh, 286px);
     border-radius:8px;
     overflow:hidden;
     background:#f7f8fb;
@@ -283,7 +311,7 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:44px 24px;
+    padding:24px 24px 36px;
     text-align:center;
     animation:bodyIn 1.9s ease 1s both;
   }
@@ -294,7 +322,7 @@
     letter-spacing:.2em;
   }
   .tc-cast{
-    margin:8px 0 0;
+    margin:1px 0 0;
     color:#c9ad7d;
     font-size:11px;
     letter-spacing:.14em;
@@ -304,7 +332,7 @@
     align-items:center;
     gap:10px;
     width:78%;
-    margin:18px 0 20px;
+    margin:2px 0 11px;
   }
   .tc-rule span{
     flex:1 1 auto;
@@ -324,26 +352,32 @@
     gap:12px;
     margin:0;
     color:#bfa06a;
-    font-size:19px;
+    font-size:17px;
     letter-spacing:.1em;
   }
-  .tc-ep .fl{width:38px;height:14px;flex:0 0 auto}
+  .tc-ep .fl{width:34px;height:13px;flex:0 0 auto}
   .tc-ep .fl.left{transform:scaleX(-1)}
   .tc-title{
-    margin:12px 0 0;
+    margin:6px 0 0;
     color:#1d2a45;
-    font-size:clamp(23px,6.4vw,30px);
+    font-size:20px;
     line-height:1.3;
     letter-spacing:.06em;
     font-weight:700;
   }
+
+  .tc-type,
+  .tc-cast,
+  .tc-rule{position:relative;top:-4px}
+  .tc-ep,
+  .tc-title{position:relative;top:-2px}
 
   /* ===== 点选框：白色胶囊 + 金色星芒 ===== */
   .choicebox{
     margin:2px 0 32px;
     display:flex;
     flex-direction:column;
-    gap:12px;
+    gap:20px;
     animation:boxIn .35s ease both;
   }
   .choicebox.gone{animation:boxOut .28s ease both}
@@ -354,11 +388,11 @@
     position:relative;
     display:block;
     width:100%;
-    min-height:64px;
-    padding:17px 56px 17px 22px;
+    min-height:47px;
+    padding:9px 56px 9px 22px;
     border:1px solid rgba(214,222,236,.95);
     border-radius:999px;
-    background:linear-gradient(180deg,#ffffff 0%,#f5f7fb 52%,#e8ecf3 100%);
+    background:linear-gradient(180deg,#ffffff 0%,#f2f8fe 52%,#dfeafa 100%);
     color:#242a3d;
     font-family:inherit;
     font-size:var(--base-fs);
@@ -385,14 +419,41 @@
 
   /* ===== 结尾 ===== */
   .end{
-    margin:8px 0 24px;
+    margin:10px 0 6px;
     display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap:16px;
-    animation:rise .5s ease both;
+    justify-content:flex-end;
+    animation:rise .6s ease both;
+  }
+  .end .tc{
+    margin:0;
+    color:var(--gold-soft);
+    font-family:var(--font-latin);
+    font-size:15px;
+    letter-spacing:.14em;
+    text-shadow:0 1px 6px rgba(201,169,107,.35);
   }
   .end .mark{margin:0;color:#767d8c;font-size:14px;letter-spacing:.28em}
+
+  /* 结尾再点一下出现的「继续阅读」 */
+  .nextlink{
+    margin:4px 0 40px;
+    display:flex;
+    justify-content:flex-end;
+    animation:rise .7s ease both;
+  }
+  .nextlink a{
+    display:inline-block;
+    padding:9px 16px 8px;
+    color:var(--gold-soft);
+    font-size:14px;
+    line-height:1.5;
+    letter-spacing:.08em;
+    text-decoration:none;
+    border:1px solid rgba(201,169,107,.42);
+    background:linear-gradient(180deg, rgba(211,182,129,.14), rgba(211,182,129,.05));
+    -webkit-tap-highlight-color:transparent;
+  }
+  .nextlink a:active{background:rgba(211,182,129,.22)}
   .btn{
     height:48px;
     padding:0 22px;
@@ -525,15 +586,22 @@
   .chip[aria-pressed="true"]{border-color:#8a76bd;background:rgba(79,63,120,.34);color:#fff}
 
   .note{margin:10px 0 0;color:#7b8291;font-size:12px;line-height:1.6}
+  .field input[type="range"]{
+    width:100%;
+    height:44px;
+    margin:0;
+    accent-color:#8a76bd;
+    background:transparent;
+  }
 
   .actions{display:flex;gap:10px;margin-top:22px}
   .actions .btn{flex:1}
   .actions .btn.ghost{flex:0 0 auto;background:transparent;border-color:transparent;color:#9aa0ae}
 
   @media (min-width:768px){
-    :root{--base-fs:17px}
-    .line.lv1{--fs:21px}
-    .line.lv2{--fs:26px}
+    :root{--base-fs:16px}
+    .line.lv1{--fs:20px}
+    .line.lv2{--fs:25px}
   }
 </style>
 </head>
@@ -592,6 +660,11 @@
         <button type="button" class="chip" data-self="自分" aria-pressed="false">自分</button>
         <button type="button" class="chip" data-self="僕" aria-pressed="false">僕</button>
       </div>
+    </div>
+
+    <div class="field">
+      <span class="label">台词出现速度</span>
+      <input id="speedRange" type="range" min="0" max="4" step="1" value="2" aria-label="台词出现速度">
     </div>
 
     <div class="actions">
@@ -756,7 +829,7 @@ const STORY = [
    cn:'可以的话，\n能请您稍微离开一下吗？',
    jp:'できれば、\n少しだけ、席を外していただけませんか？'},
   {t:'line', s:'ao',
-   cn:'……不行、吗？',
+   cn:'……还是说，不可以吗？',
    jp:'……だめ、でしょうか？'},
   {t:'line', s:'en',
    cn:'啊真是的，别那么说话。',
@@ -1057,6 +1130,7 @@ const STORY = [
   {t:'line', s:'ao',
    cn:'因为，\n我们，是同伴啊……。',
    jp:'だって、\n僕たちは、\n仲間ですから……。'},
+  {t:'cg', src:'assets/cg-151.jpg'},
   {t:'line', s:'conductor',
    cn:'就这样，\n与苍之间特别的日子开始了。',
    jp:'こうして、\n始まったアオとの特別な日々。'},
@@ -1139,16 +1213,26 @@ const CHOICES = {
   ]}
 };
 
-const PLACE = {
-  cn:'米拉比利斯大厦\n咖啡区「Tea Lounge」',
-  jp:'ミラビリス・ビル\nカフェスペース「Tea Lounge」'
+const PLACES = {
+  main:{
+    cn:'米拉比利斯大厦\n咖啡区「Tea Lounge」',
+    jp:'ミラビリス・ビル\nカフェスペース「Tea Lounge」'
+  }
 };
+const PLACE = PLACES.main;
 
 const TITLE = {
   kicker:{cn:'{  个人故事  }', jp:'{  パーソナルストーリー  }'},
   sub:   {cn:'苍', jp:'アオ'},
   gold:  {cn:'第 1 话', jp:'第 1 話'},
   main:  {cn:'作为命运共同体', jp:'運命共同体として'}
+};
+
+/* 结尾「继续阅读」指向的下一话 */
+const NEXT = {
+  no:{cn:'第 2 话', jp:'第 2 話'},
+  title:{cn:'记忆深处残留的事物', jp:'記憶の奥に残るもの'},
+  href:'角色对话小说阅读器-第2话.html'
 };
 
 const SPEAKERS = {
@@ -1163,9 +1247,12 @@ const SPEAKERS = {
    状态
    ========================================================= */
 const STORE_KEY = 'starfall-reader-v1';
-const settings = { cn:'京', jp:'キョウ', useJp:true, self:'私' };
+const settings = { cn:'京', jp:'キョウ', useJp:true, self:'私', speed:2 };
 let lang = 'cn';
+/* 打字间隔倍率：0 = 不逐字，直接整句出现 */
+const SPEEDS = [1.9, 1.35, 1, 0.65, 0];
 const CARD_MS = 2700;
+const CG_MS = 1750;
 
 const state = {
   ptr: 0,               // STORY 里的下一个事件
@@ -1175,7 +1262,9 @@ const state = {
   typing: false, shown: 0, timer: null,
   pendingChoice: null,
   cardT: 0, cardEl: null,
+  cgT: 0,
   ended: false,
+  nextShown: false,
   run: 0
 };
 let active = null;
@@ -1194,6 +1283,7 @@ const nameJp     = document.getElementById('nameJp');
 const useJp      = document.getElementById('useJp');
 const jpField    = document.getElementById('jpField');
 const selfChips  = document.getElementById('selfChips');
+const speedRange = document.getElementById('speedRange');
 
 /* ---------- 存取 ---------- */
 function load(){
@@ -1205,13 +1295,14 @@ function load(){
     if(typeof saved.jp === 'string' && saved.jp) settings.jp = saved.jp;
     if(typeof saved.useJp === 'boolean') settings.useJp = saved.useJp;
     if(['私','俺','自分','僕'].indexOf(saved.self) >= 0) settings.self = saved.self;
+    if(typeof saved.speed === 'number' && saved.speed >= 0 && saved.speed <= 4) settings.speed = saved.speed;
     if(saved.lang === 'jp' || saved.lang === 'cn') lang = saved.lang;
   }catch(e){}
 }
 function persist(){
   try{
     localStorage.setItem(STORE_KEY, JSON.stringify({
-      cn:settings.cn, jp:settings.jp, useJp:settings.useJp, self:settings.self, lang:lang
+      cn:settings.cn, jp:settings.jp, useJp:settings.useJp, self:settings.self, lang:lang, speed:settings.speed
     }));
   }catch(e){}
 }
@@ -1311,7 +1402,8 @@ function spark(x, y, size, opacity){
   return svg;
 }
 
-function buildPlace(animate){
+function buildPlace(animate, key){
+  const src = PLACES[key] || PLACES.main;
   const card = document.createElement('div');
   card.className = 'placecard' + (animate ? '' : ' no-anim');
 
@@ -1333,8 +1425,8 @@ function buildPlace(animate){
   body.className = 'pc-body';
 
   const name = document.createElement('p');
-  name.className = 'pc-name' + (PLACE[lang].length > 12 ? ' small' : '');
-  name.textContent = PLACE[lang];
+  name.className = 'pc-name' + (src[lang].length > 12 ? ' small' : '');
+  name.textContent = src[lang];
   body.appendChild(name);
 
   const r = document.createElement('div');
@@ -1475,10 +1567,22 @@ function buildTitle(animate){
   return card;
 }
 
-function buildCard(kind, animate){
+function buildCard(kind, animate, key){
   if(kind === 'quote') return buildQuote(animate);
-  if(kind === 'place') return buildPlace(animate);
+  if(kind === 'place') return buildPlace(animate, key);
   return buildTitle(animate);
+}
+
+/* 插图：run 时走右进左出特效，否则静态展示（重绘用） */
+function buildCg(src, animate){
+  const wrap = document.createElement('div');
+  wrap.className = 'cgcard' + (animate ? ' run' : '');
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = '';
+  img.setAttribute('draggable','false');
+  wrap.appendChild(img);
+  return wrap;
 }
 
 /* =========================================================
@@ -1550,9 +1654,10 @@ function pickChoice(id, opt){
 
   /* 选中的那句，作为主控台词接进对话 */
   state.timeline.push({kind:'chosen', opt:opt});
-  active = makeLine('conductor', fill(opt[lang], lang), 0, 0);
-  state.shown = 0;
-  state.typing = true;
+  const rate = SPEEDS[settings.speed] === undefined ? 1 : SPEEDS[settings.speed];
+  active = makeLine('conductor', fill(opt[lang], lang), 0, rate > 0 ? 0 : null);
+  state.shown = rate > 0 ? 0 : active.full.length;
+  state.typing = rate > 0;
 
   /* 之后的支线 */
   const br = opt.branch || [];
@@ -1590,7 +1695,8 @@ function tick(){
   state.shown++;
   active.txt.textContent = active.full.slice(0, state.shown);
   keepBottom();
-  state.timer = setTimeout(tick, state.shown <= 1 ? 90 : delayFor(ch));
+  const rate = SPEEDS[settings.speed] === undefined ? 1 : SPEEDS[settings.speed];
+  state.timer = setTimeout(tick, (state.shown <= 1 ? 90 : delayFor(ch)) * rate);
 }
 
 function finishTyping(){
@@ -1608,21 +1714,24 @@ function finishTyping(){
    推进：卡片也算「一句」，一次点击只出一个内容
    ========================================================= */
 function playLine(ev, animateTyping){
+  const rate = SPEEDS[settings.speed] === undefined ? 1 : SPEEDS[settings.speed];
+  const anim = !!animateTyping && rate > 0;
   state.timeline.push({kind:'line', ev:ev});
-  active = makeLine(ev.s, fill(ev[lang], lang), ev.lv || 0, animateTyping ? 0 : null);
-  state.shown = animateTyping ? 0 : active.full.length;
-  state.typing = !!animateTyping;
+  active = makeLine(ev.s, fill(ev[lang], lang), ev.lv || 0, anim ? 0 : null);
+  state.shown = anim ? 0 : active.full.length;
+  state.typing = anim;
   keepBottom();
   updateProgress();
-  if(animateTyping) tick();
+  if(anim) tick();
 }
 
 function advance(userTap){
   if(state.pendingChoice) return;     // 等玩家点选
+  if(state.cgT) return;               // 插图特效播放中，不再接受点击
 
   if(state.cardT && Date.now() - state.cardT < CARD_MS){ finishCard(); return; }
   if(state.typing){ finishTyping(); return; }
-  if(state.ended) return;
+  if(state.ended){ showNextLink(); return; }
 
   /* 选项支线优先 */
   if(state.branch.length){
@@ -1638,8 +1747,8 @@ function advance(userTap){
 
   if(ev.t === 'card'){
     state.ptr++;
-    state.timeline.push({kind:'card', card:ev.kind});
-    const el = buildCard(ev.kind, true);
+    state.timeline.push({kind:'card', card:ev.kind, key:ev.key});
+    const el = buildCard(ev.kind, true, ev.key);
     transcript.appendChild(el);
     state.cardEl = el;
     state.cardT = Date.now();
@@ -1652,6 +1761,24 @@ function advance(userTap){
     state.ptr++;
     openChoice(ev.id, true);
     updateProgress();
+    return;
+  }
+
+  /* 插图特效：和下一句算同一次点击 —— 播完自动接下一句，不用再点 */
+  if(ev.t === 'cg'){
+    state.ptr++;
+    state.timeline.push({kind:'cg', src:ev.src});
+    const g = buildCg(ev.src, true);
+    transcript.appendChild(g);
+    keepBottom();
+    updateProgress();
+    state.cgT = Date.now();
+    state.cgTimer = setTimeout(function(){
+      if(g.parentNode) g.remove();
+      state.cgT = 0;
+      state.cgTimer = null;
+      advance(true);
+    }, CG_MS);
     return;
   }
 
@@ -1683,22 +1810,40 @@ function appendEnd(){
   const end = document.createElement('div');
   end.className = 'end';
   const mark = document.createElement('p');
-  mark.className = 'mark';
-  mark.textContent = '— 完 —';
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'btn';
-  btn.setAttribute('data-restart','1');
-  btn.textContent = '从头再读';
+  mark.className = 'tc';
+  mark.textContent = 'To be continued...';
   end.appendChild(mark);
-  end.appendChild(btn);
   transcript.appendChild(end);
   updateProgress();
   keepBottom();
 }
 
+/* 结尾之后再多点一下，出现下一话入口 */
+function appendNextLink(){
+  const old = transcript.querySelector('.nextlink');
+  if(old) old.remove();
+  if(!NEXT) return;
+  const box = document.createElement('div');
+  box.className = 'nextlink';
+  const a = document.createElement('a');
+  a.href = NEXT.href;
+  a.textContent = '【' + (lang === 'jp' ? '続きを読む' : '继续阅读') +
+    '　' + NEXT.no[lang] + '　' + NEXT.title[lang] + '】';
+  box.appendChild(a);
+  transcript.appendChild(box);
+  keepBottom();
+}
+
+function showNextLink(){
+  if(!NEXT || state.nextShown) return;
+  state.nextShown = true;
+  appendNextLink();
+}
+
 function startStory(){
   clearTimeout(state.timer);
+  clearTimeout(state.cgTimer);
+  state.cgTimer = null;
   state.run++;
   transcript.innerHTML = '';
   state.ptr = 0;
@@ -1709,8 +1854,10 @@ function startStory(){
   state.shown = 0;
   state.pendingChoice = null;
   state.ended = false;
+  state.nextShown = false;
   state.cardT = 0;
   state.cardEl = null;
+  state.cgT = 0;
   active = null;
   updateProgress();
   advance(false);   // 只出第一个内容，不需要任何点击
@@ -1726,12 +1873,17 @@ function rerender(restartTyping){
   active = null;
   state.cardT = 0;
   state.cardEl = null;
+  clearTimeout(state.cgTimer);
+  state.cgTimer = null;
+  state.cgT = 0;
 
   const items = state.timeline;
   items.forEach(function(it, i){
     const isLast = i === items.length - 1;
     if(it.kind === 'card'){
-      transcript.appendChild(buildCard(it.card, false));
+      transcript.appendChild(buildCard(it.card, false, it.key));
+    }else if(it.kind === 'cg'){
+      transcript.appendChild(buildCg(it.src, false));
     }else if(it.kind === 'line'){
       active = makeLine(it.ev.s, fill(it.ev[lang], lang), it.ev.lv || 0, isLast && restartTyping ? 0 : null);
     }else if(it.kind === 'chosen'){
@@ -1749,6 +1901,7 @@ function rerender(restartTyping){
 
   if(state.pendingChoice) openChoice(state.pendingChoice, false);
   if(state.ended) appendEnd();
+  if(state.nextShown) appendNextLink();
   updateProgress();
   keepBottom();
 }
@@ -1796,6 +1949,7 @@ function openSheet(which){
     each(selfChips.querySelectorAll('.chip'), function(c){
       c.setAttribute('aria-pressed', c.dataset.self === settings.self ? 'true' : 'false');
     });
+    speedRange.value = String(settings.speed);
   }
 }
 
@@ -1809,6 +1963,12 @@ document.getElementById('btnExit').addEventListener('click', function(){
   location.href = '角色故事目录.html';
 });
 document.getElementById('btnCancel').addEventListener('click', closeSheet);
+
+speedRange.addEventListener('input', function(){
+  const v = Number(speedRange.value);
+  settings.speed = (v >= 0 && v <= 4) ? v : 2;
+  persist();
+});
 
 useJp.addEventListener('change', function(){
   jpField.style.display = useJp.checked ? '' : 'none';
